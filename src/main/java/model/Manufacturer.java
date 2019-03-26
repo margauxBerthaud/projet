@@ -9,46 +9,29 @@ package model;
  *
  * @author hbroucke
  */
-public class Customer {
-    public int CUSTOMER_ID;
-    public String DISCOUNT_CODE;
-    public int ZIP;
+public class Manufacturer {
+    public int MANUFACTURER_ID;
     public String NAME;
     public String ADDRESSLINE1;
     public String ADDRESSLINE2;
     public String CITY;
     public String STATE;
+    public int ZIP;
     public String PHONE;
     public String FAX;
     public String EMAIL;
-    public int CREDIT_LIMIT;
+    public String REP;
     
-    public Customer(){
+    public Manufacturer(){
         
     }
-    
-    public int getCUSTOMER_ID() {
-        return CUSTOMER_ID;
+
+    public int getMANUFACTURER_ID() {
+        return MANUFACTURER_ID;
     }
 
-    public void setCUSTOMER_ID(int CUSTOMER_ID) {
-        this.CUSTOMER_ID = CUSTOMER_ID;
-    }
-
-    public String getDISCOUNT_CODE() {
-        return DISCOUNT_CODE;
-    }
-
-    public void setDISCOUNT_CODE(String DISCOUNT_CODE) {
-        this.DISCOUNT_CODE = DISCOUNT_CODE;
-    }
-
-    public int getZIP() {
-        return ZIP;
-    }
-
-    public void setZIP(int ZIP) {
-        this.ZIP = ZIP;
+    public void setMANUFACTURER_ID(int MANUFACTURER_ID) {
+        this.MANUFACTURER_ID = MANUFACTURER_ID;
     }
 
     public String getNAME() {
@@ -91,6 +74,15 @@ public class Customer {
     public void setSTATE(String STATE) {
         this.STATE = STATE;
     }
+    
+    public int getZIP() {
+    return ZIP;
+    }
+
+    public void setZIP(int ZIP) {
+        this.ZIP = ZIP;
+    }
+    
     public String getPHONE() {
         return PHONE;
     }
@@ -116,12 +108,11 @@ public class Customer {
         this.EMAIL = EMAIL;
     }
 
-    public int getCREDIT_LIMIT() {
-        return CREDIT_LIMIT;
+    public String getREP() {
+        return REP;
     }
 
-    public void setCREDIT_LIMIT(int CREDIT_LIMIT) {
-        this.CREDIT_LIMIT = CREDIT_LIMIT;
-    }
-   
+    public void setREP(String REP) {
+        this.REP = REP;
+    }    
 }
