@@ -22,8 +22,8 @@ public class Manufacturer {
     public String EMAIL;
     public String REP;
     
-    public Manufacturer(){
-        
+    public Manufacturer(int MANUFACTURER_ID){
+        this.MANUFACTURER_ID = MANUFACTURER_ID;
     }
 
     public int getMANUFACTURER_ID() {

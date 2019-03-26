@@ -22,10 +22,6 @@ public class PurchaseOrder {
     public String FREIGHT_COMPANY;
     public double COST;
 
-    public PurchaseOrder(){
-        
-    }
-
     PurchaseOrder(int numComm, int numClient, int quantite) {
         this.ORDER_NUM=numComm;
         this.CUSTOMER_ID=numClient;

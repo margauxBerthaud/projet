@@ -23,8 +23,10 @@ public class Customer {
     public String EMAIL;
     public int CREDIT_LIMIT;
     
-    public Customer(){
-        
+    public Customer(int CUSTOMER_ID, String DISCOUNT_CODE, int ZIP){
+        this.CUSTOMER_ID = CUSTOMER_ID;
+        this.DISCOUNT_CODE = DISCOUNT_CODE;
+        this.ZIP = ZIP;
     }
     
     public int getCUSTOMER_ID() {

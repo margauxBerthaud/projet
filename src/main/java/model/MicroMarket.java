@@ -15,9 +15,6 @@ public class MicroMarket {
     public Double AREA_LENGTH;
     public Double AREA_WIDTH;
     
-    public MicroMarket() {
-    }
-
     public MicroMarket(String ZIP_CODE) {
         this.ZIP_CODE = ZIP_CODE;
     }

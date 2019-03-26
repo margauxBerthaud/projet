@@ -19,8 +19,10 @@ public class Product {
     public Boolean AVAILABLE;
     public String DESCRIPTION;
     
-    public Product() {
-     
+    public Product(int PRODUCT_ID, int MANUFACTURER_ID, String PRODUCT_CODE) {
+        this.PRODUCT_ID = PRODUCT_ID;
+        this.MANUFACTURER_ID = MANUFACTURER_ID;
+        this.PRODUCT_CODE = PRODUCT_CODE;
     }
 
     public int getPRODUCT_ID() {

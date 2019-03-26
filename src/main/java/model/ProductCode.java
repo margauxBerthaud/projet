@@ -14,7 +14,8 @@ public class ProductCode {
     public String DISCOUNT_CODE;
     public String DESCRITPION;  
     
-    public ProductCode() {
+    public ProductCode(String PROD_CODE) {
+        this.PROD_CODE = PROD_CODE;
     }
 
     public String getPROD_CODE() {
