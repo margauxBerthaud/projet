@@ -25,6 +25,12 @@ public class PurchaseOrder {
     public PurchaseOrder(){
         
     }
+
+    PurchaseOrder(int numComm, int numClient, int quantite) {
+        this.ORDER_NUM=numComm;
+        this.CUSTOMER_ID=numClient;
+        this.QUANTITY=quantite;//To change body of generated methods, choose Tools | Templates.
+    }
     
     public int getORDER_NUM() {
         return ORDER_NUM;
