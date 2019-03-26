@@ -31,7 +31,6 @@ public class DAO {
     
     /**
 	 * Fonction permettant de récupérer la valeur du taux de remise en passant en paramètre le client
-	 * @param dataSource la source de données à utiliser
 	 */
        private float valeur_discount_code(int customerID) throws SQLException {
         float discount=0;
@@ -97,6 +96,23 @@ public class DAO {
                     commande.setSHIPPING_COST(remise);
                     resultat.add(commande);
                     
+                }
+        }
+        return resultat;
+    }
+    /**
+	 * Fonction permettant de ressortir tous les produits disponibles sous forme de liste
+	 
+	 */
+    public List<String> tousLesProduits() throws SQLException {
+        List<String> resultat=new LinkedList<>();
+        String sql="SELECT DESCRIPTION FROM PRODUCT WHERE QUANTITY_ON_HAND>0";
+        try (Connection connection =myDataSource.getConnection();
+            PreparedStatement stmt=connection.prepareStatement(sql)){
+                ResultSet rs=stmt.executeQuery();
+                while(rs.next()){
+                    String description=rs.getString("DESCRIPTION");
+                    resultat.add(description);
                 }
         }
         return resultat;
