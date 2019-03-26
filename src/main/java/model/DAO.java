@@ -28,15 +28,37 @@ public class DAO {
     public DAO(DataSource dataSource){
         this.myDataSource=dataSource;
     }
-       private int valeur_discount_code(int id_p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    /**
+	 * Fonction permettant de récupérer la valeur du taux de remise en passant en paramètre le client
+	 * @param dataSource la source de données à utiliser
+	 */
+       private float valeur_discount_code(int customerID) throws SQLException {
+        float discount=0;
+        String sql= "SELECT DISCOUNT_CODE.RATE FROM DISCOUNT_CODE INNER JOIN CUSTOMER ON DISCOUNT_CODE.DISCOUNT_CODE=CUSTOMER.DISCOUNT_CODE WHERE CUSTOMER_ID=?";
+        try (Connection connection = myDataSource.getConnection(); 
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, customerID);
+                        ResultSet rs = stmt.executeQuery();
+                        while(rs.next()){
+                            float taux=rs.getByte("RATE");
+                            discount=taux;
+                        }
+        return discount;
     }
-        /**
-	 * Fonction permet de calculer le prix d'une commande
+       }
+    
+
+   
+
+    /**
+     * Fonction permet de calculer le prix d'une commande
      * @param id_p
      * @param quantite
      * @param id_c
-	 */
+     * @return
+     * @throws java.sql.SQLException
+     */
     public float prixCommande (int id_p, int quantite, int id_c ) throws SQLException{
         float resultat=0;
         String sql ="SELECT PRODUCT.PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
@@ -77,7 +99,7 @@ public class DAO {
                     
                 }
         }
-        return null;
+        return resultat;
     }
 
  
