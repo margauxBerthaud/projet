@@ -9,9 +9,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 /**
@@ -104,8 +108,7 @@ public class DAO {
         }
         return resultat;
     }
-    
-    
+
     /**
      * Fonction permettant de ressortir tous les produits disponibles sous forme
      * de liste
@@ -124,45 +127,135 @@ public class DAO {
         }
         return resultat;
     }
-    
+
     /**
      * Fonction permettant d'afficher l'argent disponible selon le client
      *
      */
-    public int montantDisponible(Customer c)throws SQLException {
-        int resultat=0;
-        String sql= "SELECT CREDIT_LIMIT FROM CUSTOMER WHERE CUSTOMER_ID=?";
+    public int montantDisponible(Customer c) throws SQLException {
+        int resultat = 0;
+        String sql = "SELECT CREDIT_LIMIT FROM CUSTOMER WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                resultat=rs.getInt("CREDIT_LIMIT");
+                resultat = rs.getInt("CREDIT_LIMIT");
             }
         }
         return resultat;
     }
+
     /**
      * Fonction permettant d'afficher infos disponibles selon le client
      *
      */
-    public String infosDisponibles(Customer c)throws SQLException {
+    public String infosDisponibles(Customer c) throws SQLException {
         String resultat = null;
-        String sql ="SELECT NAME, ADRESSLINE1, ADRESSLINE2, CITY, STATE, PHONE, FAX, EMAIL FROM CUSTOMER WHERE CUSTOMER_ID=?";
+        String sql = "SELECT NAME, ADRESSLINE1, ADRESSLINE2, CITY, STATE, PHONE, FAX, EMAIL FROM CUSTOMER WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String nom = rs.getString("NAME");
-                String adresse1= rs.getString("ADRESSLINE1");
-                String adresse2= rs.getString("ADRESSLINE2");
-                String ville=rs.getString("CITY");
-                String etat=rs.getString("STATE");
-                String tel=rs.getString("PHONE");
-                String fax=rs.getString("FAX");
-                String email=rs.getString("EMAIL");
-                String newLine=System.getProperty("line.separator");
-                resultat=" "+nom+newLine+adresse1+" "+adresse2+newLine+ville+newLine+etat+newLine+tel+newLine+fax+newLine+email;
+                String adresse1 = rs.getString("ADRESSLINE1");
+                String adresse2 = rs.getString("ADRESSLINE2");
+                String ville = rs.getString("CITY");
+                String etat = rs.getString("STATE");
+                String tel = rs.getString("PHONE");
+                String fax = rs.getString("FAX");
+                String email = rs.getString("EMAIL");
+                String newLine = System.getProperty("line.separator");
+                resultat = " " + nom + newLine + adresse1 + " " + adresse2 + newLine + ville + newLine + etat + newLine + tel + newLine + fax + newLine + email;
             }
+        }
+        return resultat;
+    }
+    /**
+     * Fonction permettant d'afficher infos disponibles pour une catégorie de produit
+     *
+     */
+    public String getDescription(int product_id) throws SQLException {
+        String resultat=null;
+        String sql = "SELECT DESCRIPTION FROM PRODUCT_CODE WHERE PROD_CODE=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, product_id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat=rs.getString("DESCRIPTION");
+            }
+                
+            }
+        return resultat;
+    }
+    /**
+     * Fonction permettant d'afficher le chiffre d'affaire par catégorie
+     * d'article et période
+     *
+     * @param dateD
+     * @param dateF
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public float recupererPrix(int product_id) throws SQLException{
+        float resultat=0;
+        String sql="SELECT PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat=rs.getFloat("PURCHASE_COST");
+            }
+        }
+        return resultat;
+    }
+    
+
+    /**
+     * Fonction permettant d'afficher le chiffre d'affaire par catégorie
+     * d'article et période
+     *
+     * @param dateD
+     * @param dateF
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public Map<String, Double> CAparDateEtCategorieProduit(String dateD, String dateF) throws SQLException {
+        Map<String, Double> resultat = new Hashtable();
+        String sql = "SELECT PROD_CODE, SUM(QUANTITY) AS SALES \n"
+                + "FROM PURCHASE_ORDER INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID \n"
+                + "INNER JOIN PRODUCT_CODE ON PRODUCT.PRODUCT_CODE=PRODUCT_CODE.PROD_CODE  \n"
+                + "WHERE SHIPPING_DATE>=? AND SHIPPING_DATE<=?  GROUP BY PROD_CODE";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date debut = null;
+            Date fin = null;
+            try {
+                debut = sdf.parse(dateD);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                fin = sdf.parse(dateF);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(debut.getTime());
+            java.sql.Date data2 = new java.sql.Date(fin.getTime());
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String produit =getDescription(rs.getInt("PROD_CODE"));
+                double prix=rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                resultat.put(produit, prix);
+
+            }
+
         }
         return resultat;
     }
