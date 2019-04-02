@@ -170,46 +170,46 @@ public class DAO {
         }
         return resultat;
     }
+
     /**
-     * Fonction permettant d'afficher infos disponibles pour une catégorie de produit
+     * Fonction permettant d'afficher infos disponibles pour une catégorie de
+     * produit
      *
      */
     public String getDescription(int product_id) throws SQLException {
-        String resultat=null;
+        String resultat = null;
         String sql = "SELECT DESCRIPTION FROM PRODUCT_CODE WHERE PROD_CODE=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, product_id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                resultat=rs.getString("DESCRIPTION");
+                resultat = rs.getString("DESCRIPTION");
             }
-                
-            }
+
+        }
         return resultat;
     }
+
     /**
-     * Fonction permettant d'afficher le chiffre d'affaire par catégorie
-     * d'article et période
+     * Fonction permettant de récupérer le prix en fonction de l'id
      *
-     * @param dateD
-     * @param dateF
+     * @param product_id
      * @return
      * @throws java.sql.SQLException
      */
-    public float recupererPrix(int product_id) throws SQLException{
-        float resultat=0;
-        String sql="SELECT PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
+    public float recupererPrix(int product_id) throws SQLException {
+        float resultat = 0;
+        String sql = "SELECT PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                resultat=rs.getFloat("PURCHASE_COST");
+                resultat = rs.getFloat("PURCHASE_COST");
             }
         }
         return resultat;
     }
-    
 
     /**
      * Fonction permettant d'afficher le chiffre d'affaire par catégorie
@@ -250,8 +250,8 @@ public class DAO {
             stmt.setDate(2, data2);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String produit =getDescription(rs.getInt("PROD_CODE"));
-                double prix=rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                String produit = getDescription(rs.getInt("PROD_CODE"));
+                double prix = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 resultat.put(produit, prix);
 
             }
@@ -259,5 +259,46 @@ public class DAO {
         }
         return resultat;
     }
-    
-}
+
+    /**
+     * Fonction permettant de savoir si le client a un compte
+     *
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public Customer connexionClient(String email) throws SQLException {
+        Customer c = new Customer();
+        String sql = "SELECT * FROM CUSTOMER WHERE EMAIL=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+
+                c.setEMAIL("nodata");
+                c.setPassword("nodata");
+                c.setNAME("nodata");
+
+                return c;
+            } else {
+                do {
+
+                    c.setEMAIL(email);
+                    c.setPassword(String.valueOf(rs.getInt("CUSTOMER_ID")));
+                    c.setNAME(rs.getString("NAME"));
+                    c.setCITY(rs.getString("CITY"));
+                    c.setADDRESSLINE1(rs.getString("ADDRESSLINE1"));
+                    c.setPHONE(rs.getString("PHONE"));
+                    c.setCREDIT_LIMIT(rs.getInt("CREDIT_LIMIT"));
+                } while (rs.next());
+
+                    }
+
+                
+                
+                
+            }
+        return c;
+        }
+    }
+
