@@ -124,6 +124,21 @@ public class DAO {
         }
         return resultat;
     }
-
- 
+    
+    /**
+     * Fonction permettant d'afficher l'argent disponible selon le client
+     *
+     */
+    public int montantDisponible(Customer c)throws SQLException {
+        int resultat=0;
+        String sql= "SELECT CREDIT_LIMIT FROM CUSTOMER WHERE CUSTOMER_ID=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat=rs.getInt("CREDIT_LIMIT");
+            }
+        }
+        return resultat;
+    }
 }
