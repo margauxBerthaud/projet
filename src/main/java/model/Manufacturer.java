@@ -5,11 +5,17 @@
  */
 package model;
 
+import java.util.Collection;
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlTransient;
+
+
 /**
  *
  * @author hbroucke
  */
-public class Manufacturer {
+public class Manufacturer implements Serializable {
+    private static final long serialVersionUID = 1L;
     public int MANUFACTURER_ID;
     public String NAME;
     public String ADDRESSLINE1;
@@ -21,6 +27,7 @@ public class Manufacturer {
     public String FAX;
     public String EMAIL;
     public String REP;
+    private Collection<Product> productCollection;
     
     public Manufacturer(int MANUFACTURER_ID){
         this.MANUFACTURER_ID = MANUFACTURER_ID;
@@ -114,5 +121,38 @@ public class Manufacturer {
 
     public void setREP(String REP) {
         this.REP = REP;
+    }
+    
+    public Collection<Product> getProductCollection() {
+        return productCollection;
+    }
+
+    public void setProductCollection(Collection<Product> productCollection) {
+        this.productCollection = productCollection;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (MANUFACTURER_ID != null ? MANUFACTURER_ID.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Manufacturer)) {
+            return false;
+        }
+        Manufacturer other = (Manufacturer) object;
+        if ((this.MANUFACTURER_ID == null && other.MANUFACTURER_ID != null) || (this.MANUFACTURER_ID != null && !this.MANUFACTURER_ID.equals(other.MANUFACTURER_ID))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "model.Manufacturer[ manufacturerId=" + MANUFACTURER_ID + " ]";
     }    
 }

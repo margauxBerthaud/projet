@@ -22,11 +22,10 @@ public class Customer {
     public String FAX;
     public String EMAIL;
     public int CREDIT_LIMIT;
+    public String PASSWORD;
     
-    public Customer(int CUSTOMER_ID, String DISCOUNT_CODE, int ZIP){
-        this.CUSTOMER_ID = CUSTOMER_ID;
-        this.DISCOUNT_CODE = DISCOUNT_CODE;
-        this.ZIP = ZIP;
+    public Customer(){
+
     }
     
     public int getCUSTOMER_ID() {
@@ -125,5 +124,11 @@ public class Customer {
     public void setCREDIT_LIMIT(int CREDIT_LIMIT) {
         this.CREDIT_LIMIT = CREDIT_LIMIT;
     }
-   
+    public String getPassword() {
+        return PASSWORD;
+    }
+
+    public void setPassword(String password) {
+        this.PASSWORD = password;
+    }   
 }
