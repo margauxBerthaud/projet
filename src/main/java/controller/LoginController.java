@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
 	 * @throws IOException if an I/O error occurs
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+		throws ServletException, IOException, SQLException {
 		// Quelle action a appelé cette servlet ?
 		String action = request.getParameter("action");
 		if (null != action) {
@@ -71,7 +71,11 @@ public class LoginController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	/**
@@ -85,7 +89,11 @@ public class LoginController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	/**
@@ -119,7 +127,7 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("userName", "admin");
 		} 
                 else if(!"".equals(loginParam) && !"".equals(passwordParam)){
-                   Customer c = dao.findCustomerID(loginParam);
+                   Customer c = dao.connexionClient(loginParam);
                 // On récupère les propriétés du client 
                    String login = c.getEMAIL();
                    String password = c.getPassword();
@@ -171,7 +179,7 @@ public class LoginController extends HttpServlet {
             String password = ((String)session.getAttribute("userPassword"));
             Customer c = new Customer();
             c.setPassword(password);
-            result = dao.customerCommandes(c);                    
+            result = dao.commandesClient(c);                    
             return result;
          }
          
@@ -182,7 +190,7 @@ public class LoginController extends HttpServlet {
             String password = ((String)session.getAttribute("userPassword"));
             Customer c = new Customer();
             c.setPassword(password);
-            result = dao.customerCodes(c);         
+            result = dao.codesClients(c);         
             
             return result;
     }
