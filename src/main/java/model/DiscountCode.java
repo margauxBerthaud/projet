@@ -13,8 +13,9 @@ public class DiscountCode {
     public String DISCOUNT_CODE;
     public float RATE;
     
-    public DiscountCode(String DISCOUNT_CODE){
+    public DiscountCode(String DISCOUNT_CODE, float Rate){
         this.DISCOUNT_CODE = DISCOUNT_CODE;
+        this.RATE=Rate;
     }
     
     public String getDISCOUNT_CODE() {

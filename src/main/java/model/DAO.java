@@ -293,13 +293,27 @@ public class DAO {
                     c.setCREDIT_LIMIT(rs.getInt("CREDIT_LIMIT"));
                 } while (rs.next());
 
-                    }
-
-                
-                
-                
             }
-        return c;
+
         }
+        return c;
     }
 
+    public List<DiscountCode> codesClients(Customer c) throws SQLException {
+        List<DiscountCode> dc = new LinkedList<>();
+        int id = Integer.parseInt(c.getPassword());
+        String sql = "SELECT * FROM DISCOUNT_CODE INNER JOIN CUSTOMER USING DISCOUNT_CODE WHERE CUSTOMER_ID=? ";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String discount = rs.getString("DISCOUNT_CODE");
+                float rate = rs.getFloat("RATE");
+                DiscountCode d = new DiscountCode(discount, rate);
+                dc.add(d);
+            }
+        }
+        return dc;
+    }
+}
