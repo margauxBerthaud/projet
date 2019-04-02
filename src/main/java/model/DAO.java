@@ -141,4 +141,30 @@ public class DAO {
         }
         return resultat;
     }
+    /**
+     * Fonction permettant d'afficher infos disponibles selon le client
+     *
+     */
+    public String infosDisponibles(Customer c)throws SQLException {
+        String resultat = null;
+        String sql ="SELECT NAME, ADRESSLINE1, ADRESSLINE2, CITY, STATE, PHONE, FAX, EMAIL FROM CUSTOMER WHERE CUSTOMER_ID=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String nom = rs.getString("NAME");
+                String adresse1= rs.getString("ADRESSLINE1");
+                String adresse2= rs.getString("ADRESSLINE2");
+                String ville=rs.getString("CITY");
+                String etat=rs.getString("STATE");
+                String tel=rs.getString("PHONE");
+                String fax=rs.getString("FAX");
+                String email=rs.getString("EMAIL");
+                String newLine=System.getProperty("line.separator");
+                resultat=" "+nom+newLine+adresse1+" "+adresse2+newLine+ville+newLine+etat+newLine+tel+newLine+fax+newLine+email;
+            }
+        }
+        return resultat;
+    }
+    
 }
