@@ -299,6 +299,12 @@ public class DAO {
         return c;
     }
 
+    /**
+     * Fonction permettant de connaître tous les codes que possèdent un client
+     *
+     * @return
+     * @throws java.sql.SQLException
+     */
     public List<DiscountCode> codesClients(Customer c) throws SQLException {
         List<DiscountCode> dc = new LinkedList<>();
         int id = Integer.parseInt(c.getPassword());
@@ -315,5 +321,57 @@ public class DAO {
             }
         }
         return dc;
+    }
+ /**
+     * Fonction permettant de connaître le chiffre d'affaire en fonction du client
+     *
+     * @param dateD
+     * @param dateF
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public Map<String, Double> CAParDateEtClient(String dateD, String dateF) throws SQLException {
+        Map<String, Double> resultat = new Hashtable();
+        String sql = "SELECT CUSTOMER.NAME, SUM(QUANTITY) AS SALES \n"
+                + "FROM CUSTOMER INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
+                + "INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
+                + "WHERE SHIPPING_DATE>=? AND SHIPPING_DATE<=?  GROUP BY CUSTOMER.\"NAME\";";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date debut = null;
+            Date fin = null;
+            try {
+                debut = sdf.parse(dateD);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                fin = sdf.parse(dateF);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(debut.getTime());
+            java.sql.Date data2 = new java.sql.Date(fin.getTime());
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String client = rs.getString("NAME");
+                double prix = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                if (resultat.containsKey(client)){
+                    resultat.put(client, prix+resultat.get(client));
+                }
+                else{
+                    resultat.put(client, prix);
+                }
+
+            }
+
+        }
+        return resultat;
     }
 }
