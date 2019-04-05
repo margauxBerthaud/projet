@@ -338,7 +338,7 @@ public class DAO {
         String sql = "SELECT CUSTOMER.NAME, SUM(QUANTITY) AS SALES \n"
                 + "FROM CUSTOMER INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
                 + "INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
-                + "WHERE SHIPPING_DATE>=? AND SHIPPING_DATE<=?  GROUP BY CUSTOMER.\"NAME\";";
+                + "WHERE SHIPPING_DATE<=? AND SHIPPING_DATE>=?  GROUP BY CUSTOMER.\"NAME\";";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
