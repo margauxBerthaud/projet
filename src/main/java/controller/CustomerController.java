@@ -44,48 +44,54 @@ public class CustomerController extends HttpServlet {
         HttpSession newSession = request.getSession();
         DAO dao = new DAO();
         String evenement = request.getParameter("evenement");
-        
+
         //Ajouter commandes
         String quantite = request.getParameter("quantite");
         ArrayList<String> list = (ArrayList<String>) dao.tousLesProduits();
-        request.setAttribute("listeProduit",list);
-        
+        request.setAttribute("listeProduit", list);
+
         //Edition commande
         String purchaseToEdit = request.getParameter("purchaseToEdit");
-        
+
         // Suppression Commandes
         String purchaseToDelete = request.getParameter("purchaseToDelete");
         String password = (String) newSession.getAttribute("userPassword");
-        
-        
-        
-        
+
         try {
             Customer c = new Customer();
             c.setPassword(password);
             newSession.setAttribute("codes", voirCodesClient(request));
-            switch (evenement){
-                case "Ajout_Commande" :
-                    dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite),dao.numProduit(request.getParameter("produit")));
+            switch (evenement) {
+                case "Ajout_Commande":
+                    dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));
                     newSession.setAttribute("commandes", dao.commandesClient(c));
-                    request.setAttribute("message", "Vous avez commandez "+ quantite + " "+ request.getParameter("produit") + ".");
+                    request.setAttribute("message", "Vous avez commandez " + quantite + " " + request.getParameter("produit") + ".");
                     request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     break;
-                case "Edit_Commande" :
+                case "Edit_Commande":
                     try {
                         String quantityToEdit = request.getParameter("quantityToEdit");
-                        dao.editCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password) );
+                        dao.editCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
                         request.setAttribute("message", "Commande " + purchaseToEdit + " modifiée");
                         newSession.setAttribute("commandes", dao.commandesClient(c));
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
-                    }catch (SQLIntegrityConstraintViolationException e){
-                        request.setAttribute("message", "Impossible de modifier " +  purchaseToEdit + ", cette commande.");
+                    } catch (SQLIntegrityConstraintViolationException e) {
+                        request.setAttribute("message", "Impossible de modifier " + purchaseToEdit + ", cette commande.");
                     }
                     break;
-                    
+                case "Supprimer_Commande":
+                    try {
+                        dao.supprimerCommande(Integer.parseInt(purchaseToDelete));
+                        newSession.setAttribute("commandes", dao.commandesClient(c));
+                        request.setAttribute("message", "Commande " + purchaseToDelete + " Supprimée");
+                        request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    } catch (SQLIntegrityConstraintViolationException e) {
+                        request.setAttribute("message2", "Impossible de supprimer " + purchaseToDelete + ", cette commande.");
+                    }
+                    break;
+
             }
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             Logger.getLogger("customerController").log(Level.SEVERE, "Action en erreur", ex);
             request.setAttribute("message", ex.getMessage());
         }
@@ -138,14 +144,14 @@ public class CustomerController extends HttpServlet {
     }// </editor-fold>
 
     private ArrayList<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
-       ArrayList<DiscountCode> listCustomerCode = new ArrayList();
-       DAO dao = new DAO();
-       HttpSession newSession = request.getSession();
-       String password = (String) newSession.getAttribute("userPassword");
-       Customer c = new Customer();
-       c.setPassword(password);
-       listCustomerCode = (ArrayList<DiscountCode>) dao.codesClients(c);
-       return listCustomerCode;
+        ArrayList<DiscountCode> listCustomerCode = new ArrayList();
+        DAO dao = new DAO();
+        HttpSession newSession = request.getSession();
+        String password = (String) newSession.getAttribute("userPassword");
+        Customer c = new Customer();
+        c.setPassword(password);
+        listCustomerCode = (ArrayList<DiscountCode>) dao.codesClients(c);
+        return listCustomerCode;
     }
 
 }
