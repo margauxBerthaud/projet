@@ -63,6 +63,15 @@ public class CustomerController extends HttpServlet {
             Customer c = new Customer();
             c.setPassword(password);
             newSession.setAttribute("codes", voirCodesClient(request));
+            switch (evenement){
+                case "Ajout_Commande" :
+                    dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite),dao.numProduit(request.getParameter("produit")));
+                    newSession.setAttribute("commandes", dao.commandesClient(c));
+                    request.setAttribute("message", "Vous avez commandez "+ quantite + " "+ request.getParameter("produit") + ".");
+                    request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    break;
+                    
+            }
         }
         catch(Exception ex){
             Logger.getLogger("customerController").log(Level.SEVERE, "Action en erreur", ex);
@@ -79,7 +88,6 @@ public class CustomerController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {

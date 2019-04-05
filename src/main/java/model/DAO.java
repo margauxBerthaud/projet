@@ -484,4 +484,22 @@ public class DAO {
         }
         return resultat;
     }
+    
+    // Retourne l'id du produit
+    public int numProduit(String prod) throws SQLException {
+        int result = 0;
+
+        String sql = "SELECT * FROM PRODUCT WHERE DESCRIPTION LIKE ?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, prod);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+
+                result = rs.getInt("PRODUCT_ID");
+            }
+        }
+        System.out.println("Le produit est : " + result + "----------------------");
+        return result;
+    }
 }
