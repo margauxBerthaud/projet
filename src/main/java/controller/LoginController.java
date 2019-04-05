@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,11 +47,11 @@ public class LoginController extends HttpServlet {
 		String jspView;
 		if (null == userName) { // L'utilisateur n'est pas connecté
 			// On choisit la page de login
-			jspView = "WEB-INF/login.jsp";
+			jspView = "login.jsp";
 
 		} else { // L'utilisateur est connecté
 			// On choisit la page d'affichage
-			jspView = "WEB-INF/affiche.jsp";
+			jspView = "customer.jsp";
 		}
 		// On va vers la page choisie
 		request.getRequestDispatcher(jspView).forward(request, response);
@@ -109,18 +108,13 @@ public class LoginController extends HttpServlet {
 	private void checkLogin(HttpServletRequest request) throws SQLException {
                 // Interaction avec la base de données
                 DAO dao = new DAO();
-                CustomerController cutomerCtrl = new CustomerController();
+
 		// Les paramètres transmis dans la requête
 		String loginParam = request.getParameter("loginParam");
 		String passwordParam = request.getParameter("passwordParam");
 
-		// Le login/password défini dans web.xml
-		String login = getInitParameter("login");
-		String password = getInitParameter("password");
-		String userName = getInitParameter("userName");
-
                 // Login de l'administrateur
-		if ((login.equals("admin@mail.com") && (password.equals("pass")))) {
+		if ((loginParam.equals("admin@mail.com") && (passwordParam.equals("pass")))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
 			HttpSession session = request.getSession(true); // démarre la session
@@ -132,8 +126,6 @@ public class LoginController extends HttpServlet {
                    String login = c.getEMAIL();
                    String password = c.getPassword();
                    String userName = c.getNAME();
-                   String phone = c.getPHONE();
-                   String address = c.getADDRESSLINE1();
                    
                    // Si l'email et le mot de passe correspondent, le client peut se connecter
                     if ((login.equals(loginParam) && (password.equals(passwordParam)))) {
@@ -142,14 +134,6 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("userName", userName);
                         session.setAttribute("userEmail", login);
                         session.setAttribute("userPassword", password);
-                        session.setAttribute("userAddress", address);
-                        session.setAttribute("userPhone", phone);
-                        session.setAttribute("commandes", dao.commandesClient(c));  
-                        List<String> listeProd = dao.tousLesProduits();
-                        request.setAttribute("listeProduits", listeProd);
-                        Double solde = dao.montantDisponible(Double.parseDouble(password));
-                        session.setAttribute("solde", solde);
-                        session.setAttribute("codes", viewCodes(request));
                     } 
                     
                     else{
