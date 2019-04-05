@@ -391,7 +391,7 @@ public class DAO {
         String sql = "SELECT CITY,COUNT(QUANTITY) AS SALES FROM CUSTOMER \n"
                 + "                INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
                 + "                INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
-                + "                WHERE SALES_DATE<='2011-05-29' AND SALES_DATE>='2011-05-01'\n"
+                + "                WHERE SALES_DATE<=? AND SALES_DATE>=?\n"
                 + "                GROUP BY CITY";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -418,6 +418,60 @@ public class DAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String ville = rs.getString("CITY");
+                double prix = rs.getFloat("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                if (resultat.containsKey(ville)){
+                    resultat.put(ville,resultat.get(ville) + prix);
+                }
+                else{
+                    resultat.put(ville,prix);
+                }
+                
+            }
+        }
+        return resultat;
+    }
+        /**
+     * Fonction permettant de connaître le chiffre d'affaire en fonction de la
+     * zone géographique du producteur
+     *
+     * @param dateD
+     * @param dateF
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public Map<String, Double> CAParDateEtZoneProducteur(String dateD, String dateF) throws SQLException {
+        Map<String, Double> resultat = new HashMap<>();
+        String sql = "SELECT MANUFACTURER.CITY,COUNT(QUANTITY) AS SALES FROM CUSTOMER \n"
+                + "                INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
+                + "                INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
+                + "                INNER JOIN  MANUFACTURER ON PRODUCT.MANUFACTURER_ID=MANUFACTURER.MANUFACTURER_ID\n"
+                + "                WHERE SALES_DATE<=? AND SALES_DATE>=?\n"
+                + "                GROUP BY CITY";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date debut = null;
+            Date fin = null;
+            try {
+                debut = sdf.parse(dateD);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                fin = sdf.parse(dateF);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(debut.getTime());
+            java.sql.Date data2 = new java.sql.Date(fin.getTime());
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String ville = rs.getString("MANUFACTURER.CITY");
                 double prix = rs.getFloat("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (resultat.containsKey(ville)){
                     resultat.put(ville,resultat.get(ville) + prix);
