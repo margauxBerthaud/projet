@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +70,17 @@ public class CustomerController extends HttpServlet {
                     newSession.setAttribute("commandes", dao.commandesClient(c));
                     request.setAttribute("message", "Vous avez commandez "+ quantite + " "+ request.getParameter("produit") + ".");
                     request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    break;
+                case "Edit_Commande" :
+                    try {
+                        String quantityToEdit = request.getParameter("quantityToEdit");
+                        dao.editCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password) );
+                        request.setAttribute("message", "Commande " + purchaseToEdit + " modifiée");
+                        newSession.setAttribute("commandes", dao.commandesClient(c));
+                        request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    }catch (SQLIntegrityConstraintViolationException e){
+                        request.setAttribute("message", "Impossible de modifier " +  purchaseToEdit + ", cette commande.");
+                    }
                     break;
                     
             }
