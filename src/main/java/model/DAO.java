@@ -564,4 +564,53 @@ public class DAO {
         return resultat;
         
     }
+    public int ancienneQuantite(int order_num)throws SQLException{
+        int resultat=0;
+        String sql = "SELECT QUANTITY FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order_num);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat = rs.getInt("QUANTITY");
+            }
+        }
+        return resultat;
+    }
+    public int virement(int customer_id, double montant) throws SQLException{
+        int resultat=0;
+        String sql="UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+        try (
+            Connection connection = myDataSource.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, (int) (montantDisponible(customer_id) + montant));
+            stmt.setInt(2, customer_id);
+            resultat = stmt.executeUpdate();
+            }
+        return resultat;
+    }
+    public int clientParNumCommande(int order_num)throws SQLException{
+         int resultat = 0;
+
+        String sql = "SELECT CUSTOMER_ID FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order_num);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat = rs.getInt("CUSTOMER_ID");
+            }
+        }
+        return resultat;
+    }
+    
+    public boolean editerCommande(int order_num, int quantity, int customer_id) throws SQLException{
+        boolean resultat=false;
+        int ancienneQuantite=this.ancienneQuantite(order_num);
+        if (quantity>=ancienneQuantite(order_num)){
+            this.virement(this.clientParNumCommande(order_num), this.prixCommande(order_num, quantity, order_num))
+            
+        }
+        
+    }
 }
