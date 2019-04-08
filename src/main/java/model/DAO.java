@@ -621,7 +621,6 @@ public class DAO {
         }
         return resultat;
     }
-  
 
     public boolean editerCommande(int order_num, int quantity, int customer_id) throws SQLException {
         boolean resultat = false;
@@ -642,10 +641,10 @@ public class DAO {
             }
 
         } else {
-            int difference=quantity-ancienneQuantite;
-            if (this.verifierSolde(customer_id,this.produitParNumCommande(order_num), difference)){
+            int difference = quantity - ancienneQuantite;
+            if (this.verifierSolde(customer_id, this.produitParNumCommande(order_num), difference)) {
                 this.miseAJourSolde(customer_id, prixCommande(produitParNumCommande(order_num), difference, customer_id));
-                String sql="UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
+                String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
                 try (Connection connection = myDataSource.getConnection();
                         PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setInt(1, quantity);
@@ -655,6 +654,34 @@ public class DAO {
                 }
             }
 
+        }
+        return resultat;
+    }
+
+    public int quantiteProduit(int order_num) throws SQLException {
+        int resultat = 0;
+        String sql = "SELECT QUANTITY FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order_num);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat = rs.getInt("QUANTITY");
+
+            }
+
+        }
+        return resultat;
+    }
+
+    public int supprimerCommande(int order_num) throws SQLException {
+        int resultat = 0;
+        this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.produitParNumCommande(order_num), this.quantiteProduit(order_num), this.clientParNumCommande(order_num)));
+        String sql = "DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order_num);
+            resultat = stmt.executeUpdate();
         }
         return resultat;
     }
