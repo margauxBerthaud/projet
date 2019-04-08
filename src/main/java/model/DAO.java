@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -134,7 +135,7 @@ public class DAO {
      * Fonction permettant d'afficher l'argent disponible selon le client
      *
      */
-    public int montantDisponible(Customer c) throws SQLException {
+    public double montantDisponible(int c) throws SQLException {
         int resultat = 0;
         String sql = "SELECT CREDIT_LIMIT FROM CUSTOMER WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
@@ -499,7 +500,68 @@ public class DAO {
                 result = rs.getInt("PRODUCT_ID");
             }
         }
-        System.out.println("Le produit est : " + result + "----------------------");
+      
         return result;
+    }
+    public boolean verifierSolde(int customer_id, int product_id, int quantity) throws SQLException{
+        boolean resultat=false;
+        double solde=this.montantDisponible(customer_id);
+        if (solde>=prixCommande(product_id,quantity,customer_id)){
+            resultat=true;
+        }
+        return resultat;
+    }
+    public int miseAJourSolde(int id, double prix) throws SQLException{
+        int resultat=0;
+        String sql="UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+         try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(2, id);
+            stmt.setInt(1, (int) (this.montantDisponible(id) - prix));
+            resultat = stmt.executeUpdate();
+        }
+         return resultat;
+    }
+    public int numeroCommande()throws SQLException{
+        List<Integer> resultat = new ArrayList<>();
+
+        String sql = "SELECT ORDER_NUM FROM PURCHASE_ORDER";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("ORDER_NUM");
+                resultat.add(id);
+            }
+        }
+        int numAlea = (int) (Math.random() * 10000);
+        while (resultat.contains(numAlea)) {
+            numAlea = (int) (Math.random() * 10000);
+        }
+        return numAlea;
+    }
+    
+    public int ajouterCommande(int customer_id,int quantity,int product_id) throws SQLException{
+        int resultat=0;
+        String sql="INSERT INTO PURCHASE_ORDER (ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY,SHIPPING_DATE) VALUES (?,?,?,?,?)";
+        if (verifierSolde(customer_id, product_id,quantity )==true){
+            this.miseAJourSolde(customer_id, prixCommande(product_id,quantity,customer_id));
+            try (Connection connection = myDataSource.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setInt(1, numeroCommande());
+                stmt.setInt(2, customer_id);
+                stmt.setInt(3, product_id);
+                stmt.setInt(4, quantity);
+
+                stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
+                resultat = stmt.executeUpdate();
+            }
+        }
+        else {
+            throw new SQLException ("Vous n'avez pas assez d'argent disponible");
+            
+        }
+        return resultat;
+        
     }
 }
