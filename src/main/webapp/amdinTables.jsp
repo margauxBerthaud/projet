@@ -117,6 +117,17 @@
         </div>
       </div>
       <!-- End Navbar -->
+            <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h4 class="card-title"> Client List</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
       <div class="content">
         <div class="row">
           <div class="col-md-12">

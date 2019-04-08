@@ -304,7 +304,7 @@
             <div class="container-fluid">
 
                 <p class="copyright pull-right">
-                    &copy;<a href="#">Promotion 2020</a>, made with <i data-v-a2425572="" class="fa fa-heart" style="color: rgb(233, 30, 99);"></i> by Sophie Peltier, Gabrielle Aussel & Anthony Dagneaux
+                    &copy;<a href="#">Promotion 2021</a>, made with <i data-v-a2425572="" class="fa fa-heart" style="color: rgb(233, 30, 99);"></i> by Margaux Berthaud, Hugo Broucke, Nicolas Vollherbst et Adrien Darribeyros
                 </p>
             </div>
         </footer>
@@ -342,7 +342,7 @@
 
             $.notify({
                 icon: 'pe-7s-gift',
-                message: "Bienvenue sur votre super Web Market ${userName}! Réalisé par Soso, Gaby et Antho"
+                message: "Bienvenue sur Web Application Market ${userName}! Réalisé par Margaux, Hugo, Nicolas et Adrien"
 
             }, {
                 type: 'info',
