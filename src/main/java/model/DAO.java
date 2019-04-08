@@ -420,18 +420,18 @@ public class DAO {
             while (rs.next()) {
                 String ville = rs.getString("CITY");
                 double prix = rs.getFloat("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                if (resultat.containsKey(ville)){
-                    resultat.put(ville,resultat.get(ville) + prix);
+                if (resultat.containsKey(ville)) {
+                    resultat.put(ville, resultat.get(ville) + prix);
+                } else {
+                    resultat.put(ville, prix);
                 }
-                else{
-                    resultat.put(ville,prix);
-                }
-                
+
             }
         }
         return resultat;
     }
-        /**
+
+    /**
      * Fonction permettant de connaître le chiffre d'affaire en fonction de la
      * zone géographique du producteur
      *
@@ -474,18 +474,17 @@ public class DAO {
             while (rs.next()) {
                 String ville = rs.getString("MANUFACTURER.CITY");
                 double prix = rs.getFloat("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                if (resultat.containsKey(ville)){
-                    resultat.put(ville,resultat.get(ville) + prix);
+                if (resultat.containsKey(ville)) {
+                    resultat.put(ville, resultat.get(ville) + prix);
+                } else {
+                    resultat.put(ville, prix);
                 }
-                else{
-                    resultat.put(ville,prix);
-                }
-                
+
             }
         }
         return resultat;
     }
-    
+
     // Retourne l'id du produit
     public int numProduit(String prod) throws SQLException {
         int result = 0;
@@ -500,29 +499,32 @@ public class DAO {
                 result = rs.getInt("PRODUCT_ID");
             }
         }
-      
+
         return result;
     }
-    public boolean verifierSolde(int customer_id, int product_id, int quantity) throws SQLException{
-        boolean resultat=false;
-        double solde=this.montantDisponible(customer_id);
-        if (solde>=prixCommande(product_id,quantity,customer_id)){
-            resultat=true;
+
+    public boolean verifierSolde(int customer_id, int product_id, int quantity) throws SQLException {
+        boolean resultat = false;
+        double solde = this.montantDisponible(customer_id);
+        if (solde >= prixCommande(product_id, quantity, customer_id)) {
+            resultat = true;
         }
         return resultat;
     }
-    public int miseAJourSolde(int id, double prix) throws SQLException{
-        int resultat=0;
-        String sql="UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
-         try (Connection connection = myDataSource.getConnection();
+
+    public int miseAJourSolde(int id, double prix) throws SQLException {
+        int resultat = 0;
+        String sql = "UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+        try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(2, id);
             stmt.setInt(1, (int) (this.montantDisponible(id) - prix));
             resultat = stmt.executeUpdate();
         }
-         return resultat;
+        return resultat;
     }
-    public int numeroCommande()throws SQLException{
+
+    public int numeroCommande() throws SQLException {
         List<Integer> resultat = new ArrayList<>();
 
         String sql = "SELECT ORDER_NUM FROM PURCHASE_ORDER";
@@ -540,12 +542,12 @@ public class DAO {
         }
         return numAlea;
     }
-    
-    public int ajouterCommande(int customer_id,int quantity,int product_id) throws SQLException{
-        int resultat=0;
-        String sql="INSERT INTO PURCHASE_ORDER (ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY,SHIPPING_DATE) VALUES (?,?,?,?,?)";
-        if (verifierSolde(customer_id, product_id,quantity )==true){
-            this.miseAJourSolde(customer_id, prixCommande(product_id,quantity,customer_id));
+
+    public int ajouterCommande(int customer_id, int quantity, int product_id) throws SQLException {
+        int resultat = 0;
+        String sql = "INSERT INTO PURCHASE_ORDER (ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY,SHIPPING_DATE) VALUES (?,?,?,?,?)";
+        if (verifierSolde(customer_id, product_id, quantity) == true) {
+            this.miseAJourSolde(customer_id, prixCommande(product_id, quantity, customer_id));
             try (Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setInt(1, numeroCommande());
@@ -556,16 +558,16 @@ public class DAO {
                 stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
                 resultat = stmt.executeUpdate();
             }
-        }
-        else {
-            throw new SQLException ("Vous n'avez pas assez d'argent disponible");
-            
+        } else {
+            throw new SQLException("Vous n'avez pas assez d'argent disponible");
+
         }
         return resultat;
-        
+
     }
-    public int ancienneQuantite(int order_num)throws SQLException{
-        int resultat=0;
+
+    public int ancienneQuantite(int order_num) throws SQLException {
+        int resultat = 0;
         String sql = "SELECT QUANTITY FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -577,20 +579,22 @@ public class DAO {
         }
         return resultat;
     }
-    public int virement(int customer_id, double montant) throws SQLException{
-        int resultat=0;
-        String sql="UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+
+    public int virement(int customer_id, double montant) throws SQLException {
+        int resultat = 0;
+        String sql = "UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
         try (
-            Connection connection = myDataSource.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(sql)) {
+                Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, (int) (montantDisponible(customer_id) + montant));
             stmt.setInt(2, customer_id);
             resultat = stmt.executeUpdate();
-            }
+        }
         return resultat;
     }
-    public int clientParNumCommande(int order_num)throws SQLException{
-         int resultat = 0;
+
+    public int clientParNumCommande(int order_num) throws SQLException {
+        int resultat = 0;
 
         String sql = "SELECT CUSTOMER_ID FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
         try (Connection connection = myDataSource.getConnection();
@@ -603,14 +607,55 @@ public class DAO {
         }
         return resultat;
     }
-    
-    public boolean editerCommande(int order_num, int quantity, int customer_id) throws SQLException{
-        boolean resultat=false;
-        int ancienneQuantite=this.ancienneQuantite(order_num);
-        if (quantity>=ancienneQuantite(order_num)){
-            this.virement(this.clientParNumCommande(order_num), this.prixCommande(order_num, quantity, order_num))
-            
+
+    public int produitParNumCommande(int order_num) throws SQLException {
+        int resultat = 0;
+        String sql = "SELECT PRODUCT_ID FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order_num);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat = rs.getInt("PRODUCT_ID");
+            }
         }
-        
+        return resultat;
+    }
+  
+
+    public boolean editerCommande(int order_num, int quantity, int customer_id) throws SQLException {
+        boolean resultat = false;
+        int ancienneQuantite = this.ancienneQuantite(order_num);
+        if (quantity >= ancienneQuantite(order_num)) {
+            this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.produitParNumCommande(order_num), ancienneQuantite - quantity, this.clientParNumCommande(order_num)));
+            String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
+            try (Connection connection = myDataSource.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setInt(1, quantity);
+                stmt.setInt(2, order_num);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    resultat = true;
+                    int result = stmt.executeUpdate();
+                }
+
+            }
+
+        } else {
+            int difference=quantity-ancienneQuantite;
+            if (this.verifierSolde(customer_id,this.produitParNumCommande(order_num), difference)){
+                this.miseAJourSolde(customer_id, prixCommande(produitParNumCommande(order_num), difference, customer_id));
+                String sql="UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
+                try (Connection connection = myDataSource.getConnection();
+                        PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.setInt(1, quantity);
+                    stmt.setInt(2, order_num);
+                    int result = stmt.executeUpdate();
+                    resultat = true;
+                }
+            }
+
+        }
+        return resultat;
     }
 }

@@ -71,7 +71,7 @@ public class CustomerController extends HttpServlet {
                 case "Edit_Commande":
                     try {
                         String quantityToEdit = request.getParameter("quantityToEdit");
-                        dao.editCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
+                        dao.editerCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
                         request.setAttribute("message", "Commande " + purchaseToEdit + " modifiée");
                         newSession.setAttribute("commandes", dao.commandesClient(c));
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
