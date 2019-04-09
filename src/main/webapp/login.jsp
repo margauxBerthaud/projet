@@ -1,15 +1,14 @@
 <%-- 
     Document   : login
-    Created on : 2 avr. 2019, 14:14:48
+    Created on : 9 avr. 2019, 17:40:16
     Author     : Adrien
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri= "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-	<title>Login V9</title>
+	<title>Web Market Application Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -19,7 +18,7 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
 <!--===============================================================================================-->	
@@ -37,38 +36,40 @@
 </head>
 <body>
 	
-	
-	<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
-		<div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
-			<form class="login100-form validate-form">
-				<span class="login100-form-title p-b-37">
-					Sign In
-				</span>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-b-160 p-t-50">
+				<form class="login100-form validate-form">
+					<span class="login100-form-title p-b-43">
+						Connectez-Vous !
+					</span>
+					
+					<div class="wrap-input100 rs1 validate-input" data-validate = "Username is required">
+						<input class="input100" type="text" name="username">
+						<span class="label-input100">Identifiant</span>
+					</div>
+					
+					
+					<div class="wrap-input100 rs2 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="pass">
+						<span class="label-input100">Mot de passe</span>
+					</div>
 
-				<div class="wrap-input100 validate-input m-b-20" data-validate="Enter username or email">
-					<input class="input100" type="text" name="username" placeholder="username or email">
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input m-b-25" data-validate = "Enter password">
-					<input class="input100" type="password" name="pass" placeholder="password">
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="container-login100-form-btn">
-					<button class="login100-form-btn">
-						Sign In
-					</button>
-				</div>
-			</form>
-
-			
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							Connexion
+						</button>
+					</div>
+					
+				
+				</form>
+			</div>
 		</div>
 	</div>
 	
 	
 
-	<div id="dropDownSelect1"></div>
+	
 	
 <!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
