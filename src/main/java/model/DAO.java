@@ -38,6 +38,20 @@ public class DAO {
         this.myDataSource = dataSource;
     }
 
+    public int faireVirement(int id, double montant) throws SQLException {
+        int resultat = 0;
+        String sql = "UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+        try (
+                Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, (int) (this.montantDisponible(id) + montant));
+            stmt.setInt(2, id);
+            resultat = stmt.executeUpdate();
+        }
+        return resultat;
+
+    }
+
     /**
      * Fonction permettant de récupérer la valeur du taux de remise en passant
      * en paramètre le client
