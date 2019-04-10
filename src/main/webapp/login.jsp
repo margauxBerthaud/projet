@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -39,24 +40,24 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-b-160 p-t-50">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" action="<c:url value="LoginController" />" method="POST">
 					<span class="login100-form-title p-b-43">
 						Connectez-Vous !
 					</span>
 					
 					<div class="wrap-input100 rs1 validate-input" data-validate = "Username is required">
-						<input class="input100" type="text" name="username">
+                                            <input class="input100" type="text" name="loginParam" required>
 						<span class="label-input100">Identifiant</span>
 					</div>
 					
 					
 					<div class="wrap-input100 rs2 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="pass">
+						<input class="input100" type="password" name="passwordParam" required>
 						<span class="label-input100">Mot de passe</span>
 					</div>
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
+						<button class="login100-form-btn" type="submit" name="action" value="login">
 							Connexion
 						</button>
 					</div>

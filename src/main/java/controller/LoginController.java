@@ -51,7 +51,7 @@ public class LoginController extends HttpServlet {
 
 		}  else if ("admin".equals(userName)){
                     jspView = "adminDashboard.jsp";
-                    jspView = "adminTables.jsp";
+
                 
                 } 
                 else { // L'utilisateur est connecté
