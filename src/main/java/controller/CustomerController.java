@@ -6,7 +6,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class CustomerController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        //Ouvrir un session appelle cette servlet
+        //Ouvrir une session appelle cette servlet
         HttpSession newSession = request.getSession();
         DAO dao = new DAO();
         String evenement = request.getParameter("evenement");
@@ -57,6 +56,10 @@ public class CustomerController extends HttpServlet {
         String purchaseToDelete = request.getParameter("purchaseToDelete");
         String password = (String) newSession.getAttribute("userPassword");
 
+        //Information sur le client connecté
+        Double solde = dao.montantDisponible(Integer.parseInt(password));
+        newSession.setAttribute("solde", solde);
+
         try {
             Customer c = new Customer();
             c.setPassword(password);
@@ -65,6 +68,8 @@ public class CustomerController extends HttpServlet {
                 case "Ajout_Commande":
                     dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));
                     newSession.setAttribute("commandes", dao.commandesClient(c));
+                    solde = dao.montantDisponible(Integer.parseInt(password));
+                    newSession.setAttribute("solde", solde);
                     request.setAttribute("message", "Vous avez commandez " + quantite + " " + request.getParameter("produit") + ".");
                     request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     break;
@@ -72,11 +77,18 @@ public class CustomerController extends HttpServlet {
                     try {
                         String quantityToEdit = request.getParameter("quantityToEdit");
                         dao.editerCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
-                        request.setAttribute("message", "Commande " + purchaseToEdit + " modifiée");
+                        if (dao.editerCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password))) {
+                            request.setAttribute("message", "Commande " + purchaseToEdit + " a été modifié");
+                        } else {
+                            request.setAttribute("message", "Pas assez d'argent" + purchaseToEdit);
+                        }
                         newSession.setAttribute("commandes", dao.commandesClient(c));
+                        solde = dao.montantDisponible(Integer.parseInt(password));
+                        newSession.setAttribute("solde", solde);
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+
                     } catch (SQLIntegrityConstraintViolationException e) {
-                        request.setAttribute("message", "Impossible de modifier " + purchaseToEdit + ", cette commande.");
+                        request.setAttribute("message", "Modification impossible " + purchaseToEdit + ", cette commande est utilisée.");
                     }
                     break;
                 case "Supprimer_Commande":
@@ -87,6 +99,18 @@ public class CustomerController extends HttpServlet {
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     } catch (SQLIntegrityConstraintViolationException e) {
                         request.setAttribute("message2", "Impossible de supprimer " + purchaseToDelete + ", cette commande.");
+                    }
+                    break;
+                case "DO_VIREMENT":
+                    try {
+                        int montantVerser = Integer.parseInt(request.getParameter("montant"));
+                        dao.virement(Integer.parseInt(password), montantVerser);
+                        solde = dao.montantDisponible(Integer.parseInt(password));
+                        newSession.setAttribute("solde", solde);
+                        request.setAttribute("message", "Virement de : " + montantVerser + "€ débiter sur votre compte client.");
+                        request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    } catch (SQLIntegrityConstraintViolationException e) {
+
                     }
                     break;
 
@@ -133,15 +157,6 @@ public class CustomerController extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
     private ArrayList<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
         ArrayList<DiscountCode> listCustomerCode = new ArrayList();
