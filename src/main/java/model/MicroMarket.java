@@ -50,4 +50,30 @@ public class MicroMarket {
     public void setAREA_WIDTH(Double AREA_WIDTH) {
         this.AREA_WIDTH = AREA_WIDTH;
     }
+    
+     @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (ZIP_CODE != null ? ZIP_CODE.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof MicroMarket)) {
+            return false;
+        }
+        MicroMarket other = (MicroMarket) object;
+        if ((this.ZIP_CODE == null && other.ZIP_CODE != null) || (this.ZIP_CODE != null && !this.ZIP_CODE.equals(other.ZIP_CODE))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "model.MicroMarket[ zipCode=" + ZIP_CODE + " ]";
+    }
+    
 }

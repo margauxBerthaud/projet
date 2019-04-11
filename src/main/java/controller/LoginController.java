@@ -131,6 +131,8 @@ public class LoginController extends HttpServlet {
                    String login = c.getEMAIL();
                    String password = c.getPassword();
                    String userName = c.getNAME();
+                   String phone = c.getPHONE();
+                   String address = c.getADDRESSLINE1();
                    
                    // Si l'email et le mot de passe correspondent, le client peut se connecter
                     if ((login.equals(loginParam) && (password.equals(passwordParam)))) {
@@ -139,6 +141,14 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("userName", userName);
                         session.setAttribute("userEmail", login);
                         session.setAttribute("userPassword", password);
+                        session.setAttribute("userAddress", address);
+                        session.setAttribute("userPhone", phone);
+                        session.setAttribute("commandes", dao.commandesClient(c));  
+                        List<String> des = dao.tousLesProduits();
+                        request.setAttribute("listeProduits", des);
+                        Double solde = dao.montantDisponible(Integer.parseInt(password));
+                        session.setAttribute("solde", solde);
+                        session.setAttribute("codes", viewCodes(request));
                     } 
                     
                     else{

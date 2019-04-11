@@ -8,10 +8,7 @@
         <servlet-name>AdministratorController</servlet-name>
         <servlet-class>controller.AdministratorController</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>AdministratorTabController</servlet-name>
-        <servlet-class>controller.AdministratorTabController</servlet-class>
-    </servlet>
+
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -20,10 +17,7 @@
         <servlet-name>AdministratorController</servlet-name>
         <url-pattern>/AdministratorController</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdministratorTabController</servlet-name>
-        <url-pattern>/AdministratorTabController</url-pattern>
-    </servlet-mapping>
+
     <session-config>
         <!-- Un temps volontairement court : 5 minutes -->
         <session-timeout>

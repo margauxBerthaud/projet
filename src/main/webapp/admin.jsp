@@ -1,3 +1,16 @@
+<%--
+    Document   : admin
+    Created on : 5 avril 2019, 15:24:05
+    Author     : Adrien
+--%>
+
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -24,7 +37,7 @@
         <!--  CSS for Demo Purpose, don't include it in your project     -->
         <link href="assets/css/demo.css" rel="stylesheet" />
 
-        <!--  CSS personnalisé    -->    
+        <!--  CSS personnalisÃ©    -->    
         <link href="assets/css/custom.css" rel="stylesheet" />
 
 
@@ -90,7 +103,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Vérifions les statistiques de notre Web Site</a>
+                            <a class="navbar-brand" href="#">VÃ©rifions les statistiques de notre Web Market</a>
                         </div>
 
                     </div>
@@ -127,7 +140,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Chiffre d'affaire par Zone Géographique</h4>
+                                        <h4 class="title">Chiffre d'affaire par Zone GÃ©ographique</h4>
                                         
                                     </div>
                                     <div class="content">
@@ -139,9 +152,7 @@
                                         </form>
                                         <canvas id="chartGeo"></canvas>
                                         <div class="footer">
-                                            <div class="legend">
 
-                                            </div>
                                             <hr>
                                         </div>
                                     </div>
@@ -169,9 +180,7 @@
                                         <div class="footer">
 
                                             <hr>
-                                            <div class="stats">
-  
-                                                </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -180,7 +189,7 @@
                             <div class="col-md-6">
                                 <div class="card ">
                                     <div class="header">
-                                        <h4 class="title">Chiffre d'affaire par Catégorie d'article</h4>
+                                        <h4 class="title">Chiffre d'affaire par CatÃ©gorie d'article</h4>
    
                                         <form method='POST' action="AdminController">
                                             <input type="date" class="choixdate" name="date_debut_cat">
@@ -235,7 +244,7 @@
                     <div class="container-fluid">
 
                         <p class="copyright pull-right">
-                            &copy;<a href="#">Promotion 2021</a>, réalisé par Margaux Berthaud, Nicolas Vollherbst, Hugo Broucke & Adrien Darribeyros
+                            &copy; Promotion 2021. Projet rÃ©alisÃ© par Margaux Berthaud, Nicolas Vollherbst, Hugo Broucke & Adrien Darribeyros
                         </p>
                     </div>
                 </footer>
@@ -271,7 +280,7 @@
     <script>
         var ctx = document.getElementById('myChart').getContext('2d');
         var label = [];
-        var titre = "CA par Produit en $ ${dateProcuct}"
+        var titre = "Chiffre d'Affaire des produits en $ ${dateProcuct}"
         var ca = [];
         <c:forEach items="${productCA}" var="item" >
         label.push("${item.key}");
@@ -290,7 +299,7 @@
             data: {
                 labels: label,
                 datasets: [{
-                        label: "CA par Produit en $, ${dateProduct}.",
+                        label: "Chiffre d'affaire par produit en $, ${dateProduct}.",
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: ca,
@@ -320,7 +329,7 @@
             data: {
                 labels: label,
                 datasets: [{
-                        label: "CA par zone Géographique en $, ${dateGeo}",
+                        label: "Chiffre d'affaire par zone gÃ©ographique en $, ${dateGeo}",
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: ca,
@@ -350,7 +359,7 @@
             data: {
                 labels: label,
                 datasets: [{
-                        label: "CA par Client en $, ${dateCli}",
+                        label: "Chiffre d'Affaire par client en $, ${dateCli}",
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: ca,
@@ -380,7 +389,7 @@
             data: {
                 labels: label,
                 datasets: [{
-                        label: "CA par catégorie d'article en $, ${dateProductCode}",
+                        label: "Chiffre d'affaire par catÃ©gorie d'article en $, ${dateProductCode}",
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: ca,
@@ -410,7 +419,7 @@
             data: {
                 labels: label,
                 datasets: [{
-                           label: "CA par catégorie d'article en $, ${dateZip}",
+                           label: "Chiffre d'Affaire par code ZIP en $, ${dateZip}",
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: ca,

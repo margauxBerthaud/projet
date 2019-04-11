@@ -70,23 +70,23 @@ public class AdministratorController extends HttpServlet {
                     session.setAttribute("productCA", dao.CAparDateEtCategorieProduit(date_debut_ctg, date_fin_ctg));
                     session.setAttribute("dateProductCode", "valable du " + date_debut_ctg+ " au " + date_fin_ctg);
                     
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
                     case "caByGeo":
                     session.setAttribute("geoCA", dao.chiffreAffaireParEtat(date_debut_geo, date_fin_geo));
                     session.setAttribute("dateGeo", "du " + date_debut_geo + " au " + date_fin_geo);
 
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
                 case "caByCli":
                     session.setAttribute("cliCA", dao.CAParDateEtClient(date_debut_clt, date_fin_clt));
                     session.setAttribute("dateCli", "valade du " + date_debut_clt + " au " + date_fin_clt);
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
                 case "caByZip":
                     session.setAttribute("zipCA", dao.CAParDateEtClient(date_debut_zip, date_fin_zip));
                     session.setAttribute("datezip", "valade du " + date_debut_zip + " au " + date_fin_zip);
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
             }
         }

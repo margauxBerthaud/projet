@@ -68,7 +68,8 @@ public class CustomerController extends HttpServlet {
             c.setPassword(password);
             newSession.setAttribute("codes", voirCodesClient(request));
             switch (evenement) {
-                case "Ajout_Commande":
+                
+                case "ADD_ORDER":
                     dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));
                     newSession.setAttribute("commandes", dao.commandesClient(c));
                     solde = dao.montantDisponible(Integer.parseInt(password));
@@ -76,7 +77,9 @@ public class CustomerController extends HttpServlet {
                     request.setAttribute("message", "Vous avez commandez " + quantite + " " + request.getParameter("produit") + ".");
                     request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     break;
-                case "Edit_Commande":
+                    
+                    
+                case "EDIT_ORDER":
                     try {
                         String quantityToEdit = request.getParameter("quantityToEdit");
                         dao.editerCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
@@ -94,7 +97,9 @@ public class CustomerController extends HttpServlet {
                         request.setAttribute("message", "Modification impossible " + purchaseToEdit + ", cette commande est utilisée.");
                     }
                     break;
-                case "Supprimer_Commande":
+                    
+                    
+                case "DELETE_ORDER":
                     try {
                         dao.supprimerCommande(Integer.parseInt(purchaseToDelete));
                         newSession.setAttribute("commandes", dao.commandesClient(c));
@@ -104,6 +109,7 @@ public class CustomerController extends HttpServlet {
                         request.setAttribute("message2", "Impossible de supprimer " + purchaseToDelete + ", cette commande.");
                     }
                     break;
+                    
                 case "DO_VIREMENT":
                     try {
                         int montantVerser = Integer.parseInt(request.getParameter("montant"));
@@ -116,6 +122,7 @@ public class CustomerController extends HttpServlet {
 
                     }
                     break;
+                    
                 case "SHOW_PRODUIT":
                     List<String> listeProduit = dao.tousLesProduits();
                     newSession.setAttribute("listeProduit", listeProduit);

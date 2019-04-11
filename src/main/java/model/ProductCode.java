@@ -5,14 +5,23 @@
  */
 package model;
 
+import java.io.Serializable;
+import java.util.Collection;
+
 /**
  *
  * @author hbroucke
  */
-public class ProductCode {
+public class ProductCode implements Serializable {
     public String PROD_CODE;
     public String DISCOUNT_CODE;
     public String DESCRITPION;  
+    
+    public Collection<Product> productCollection;
+    
+    public ProductCode(){
+    }
+    
     
     public ProductCode(String PROD_CODE) {
         this.PROD_CODE = PROD_CODE;
@@ -41,4 +50,29 @@ public class ProductCode {
     public void setDESCRITPION(String DESCRITPION) {
         this.DESCRITPION = DESCRITPION;
     }
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (PROD_CODE != null ? PROD_CODE.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof ProductCode)) {
+            return false;
+        }
+        ProductCode other = (ProductCode) object;
+        if ((this.PROD_CODE == null && other.PROD_CODE != null) || (this.PROD_CODE != null && !this.PROD_CODE.equals(other.PROD_CODE))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "model.ProductCode[ prodCode=" + PROD_CODE+ " ]";
+    }
+    
 }

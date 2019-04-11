@@ -127,7 +127,7 @@
                                                     <input type="text" class="form-control" disabled placeholder="Company" value="<fmt:formatNumber value = "${solde}" type = "currency"/>">
                                                 </div>
                                             </div>
-                                            <form method='POST' action="customerController">
+                                            <form method='POST' action="CustomerController">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Somme à verser</label>
@@ -152,14 +152,14 @@
                                         <h4 class="title">Effectuer une commande : </h4>
                                     </div>
                                     <div class="content">
-                                        <form method='POST' action="customerController">
+                                        <form method='POST' action="CustomerController">
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <div class="form-group">
                                                         <label>Produit</label>
                                                         <br>
                                                         <select name="produit" class="select-custom selectpicker">
-                                                            <c:forEach var="item" items="${listeProduits}">
+                                                            <c:forEach var="item" items="${tousLesProduits}">
                                                                 <option value="${item}">${item}</option>
                                                             </c:forEach>
                                                         </select>
@@ -204,9 +204,9 @@
                                                 et d'économies" <br>
 
                                             </p>
-                                            <c:forEach var="item" items="${codes}">
-                                                <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.discountCode}"</p>
-                                                <p class="description text-center"> Il vous donne accès à  : ${item.rate}% de réduction sur votre commande</p>
+                                            <c:forEach var="item" items="${DISCOUNT_CODE}">
+                                                <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.DiscountCode}"</p>
+                                                <p class="description text-center"> Il vous donne accès à  : ${item.taux}% de réduction sur votre commande</p>
                                             </c:forEach>
                                         </div>
 
@@ -244,7 +244,7 @@
                                             
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="comm" items="${commandes}">
+                                                <c:forEach var="comm" items="${commande}">
                                                     <tr>
                                                 <form method='POST' action="customerController">
                                                     <td >
@@ -266,7 +266,7 @@
                                                 </form>
                                                     <td >
                                                         <fmt:setLocale value = "en_US"/>
-                                                        <fmt:formatNumber value = "${comm.COST}" type = "currency"/>
+                                                        <fmt:formatNumber value = "${comm.SHIPPING_COST}" type = "currency"/>
                                                         
                                                     </td>
                                                     <td >

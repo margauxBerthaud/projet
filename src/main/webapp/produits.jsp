@@ -158,7 +158,7 @@
                                                         <label>Produit</label>
                                                         <br>
                                                         <select name="produit" class="select-custom selectpicker">
-                                                            <c:forEach var="item" items="${listeProduits}">
+                                                            <c:forEach var="item" items="${tousLesProduits}">
                                                                 <option value="${item}">${item}</option>
                                                             </c:forEach>
                                                         </select>
@@ -204,9 +204,9 @@
                                                 et d'économies" <br>
 
                                             </p>
-                                            <c:forEach var="item" items="${codes}">
-                                                <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.discountCode}"</p>
-                                                <p class="description text-center"> Il vous donne accès à  : ${item.rate}% de réduction sur votre commande</p>
+                                            <c:forEach var="item" items="${DISCOUNT_CODE}">
+                                                <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.DiscountCode}"</p>
+                                                <p class="description text-center"> Il vous donne accès à  : ${item.taux}% de réduction sur votre commande</p>
                                             </c:forEach>
                                         </div>
 
@@ -242,24 +242,24 @@
 
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="p" items="${listeProduit}">
+                                                <c:forEach var="p" items="${tousLesProduits}">
                                                     <tr>
 
                                                         <td >
-                                                            ${p.productId}
+                                                            ${p.PRODUCT_ID}
                                                         </td>
                                                         <td>
                                                             
                                                             <fmt:setLocale value = "en_US"/>
-                                                            <fmt:formatNumber value = "${p.purchaseCost}" type = "currency"/>
+                                                            <fmt:formatNumber value = "${p.PURCHASE_COST}" type = "currency"/>
                                                         </td>
                                                         <td >
-                                                            ${p.description}
+                                                            ${p.DESCRIPTION}
                                                         </td>
                                                         <td >
-                                                            <c:forEach var="item" items="${codes}">
+                                                            <c:forEach var="item" items="${code}">
                                                                 <fmt:setLocale value = "en_US"/>
-                                                                <fmt:formatNumber value = "${(((100-item.rate) * p.purchaseCost)/100)}" type = "currency"/>
+                                                                <fmt:formatNumber value = "${(((100-item.taux) * p.PURCHASE_COST)/100)}" type = "currency"/>
                                                                 
                                                             </c:forEach>
                                                         </td>

@@ -25,4 +25,9 @@ public class DiscountCode {
     public float getRATE() {
 	return RATE;
     }
+    
+            @Override
+        public String toString(){
+            return ""+this.DISCOUNT_CODE;
+        }
 }

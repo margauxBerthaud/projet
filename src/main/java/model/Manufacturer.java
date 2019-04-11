@@ -5,13 +5,18 @@
  */
 package model;
 
+import java.io.Serializable;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlTransient;
+
+
 /**
  *
  * @author hbroucke
  */
-public class Manufacturer {
+public class Manufacturer implements Serializable {
 
-    public int MANUFACTURER_ID;
+    public Integer MANUFACTURER_ID;
     public String NAME;
     public String ADDRESSLINE1;
     public String ADDRESSLINE2;
@@ -22,8 +27,9 @@ public class Manufacturer {
     public String FAX;
     public String EMAIL;
     public String REP;
+    public Collection<Product> PRODUCT_COLLECTION;
     
-    public Manufacturer(int MANUFACTURER_ID){
+    public Manufacturer(Integer MANUFACTURER_ID){
         this.MANUFACTURER_ID = MANUFACTURER_ID;
     }
 
@@ -31,7 +37,7 @@ public class Manufacturer {
         return MANUFACTURER_ID;
     }
 
-    public void setMANUFACTURER_ID(int MANUFACTURER_ID) {
+    public void setMANUFACTURER_ID(Integer MANUFACTURER_ID) {
         this.MANUFACTURER_ID = MANUFACTURER_ID;
     }
 
@@ -115,6 +121,40 @@ public class Manufacturer {
 
     public void setREP(String REP) {
         this.REP = REP;
+    }
+    
+        @XmlTransient
+    public Collection<Product> getPRODUCT_COLLECTION() {
+        return PRODUCT_COLLECTION;
+    }
+    
+     public void setPRODUCT_COLLECTION(Collection<Product> PRODUCT_COLLECTION) {
+        this.PRODUCT_COLLECTION = PRODUCT_COLLECTION;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (MANUFACTURER_ID != null ? MANUFACTURER_ID.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Manufacturer)) {
+            return false;
+        }
+        Manufacturer other = (Manufacturer) object;
+        if ((this.MANUFACTURER_ID == null && other.MANUFACTURER_ID != null) || (this.MANUFACTURER_ID != null && !this.MANUFACTURER_ID.equals(other.MANUFACTURER_ID))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "model.Manufacturer[ manufacturerId=" + MANUFACTURER_ID + " ]";
     }
     
   

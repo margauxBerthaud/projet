@@ -73,14 +73,14 @@ public class DAO {
     }
     
     public int deleteDiscountCode(String code) throws SQLException {
-        int resultat2 = 0;
+        int discount = 0;
         String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
         try (Connection connection = myDataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, code);
-            resultat2 = stmt.executeUpdate();
+            discount = stmt.executeUpdate();
         }
-        return resultat2;
+        return discount;
     }
 
     /**
