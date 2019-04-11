@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
 			jspView = "login.jsp";
 
 		}  else if ("admin".equals(userName)){
-                    jspView = "adminDashboard.jsp";
+                    jspView = "admin.jsp";
 
                 
                 } 

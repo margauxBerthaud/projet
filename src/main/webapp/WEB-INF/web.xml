@@ -3,30 +3,33 @@
     <servlet>
         <servlet-name>LoginController</servlet-name>
         <servlet-class>controller.LoginController</servlet-class>
-    </servlet>  
-    
-     <servlet>
+    </servlet>
+    <servlet>
         <servlet-name>AdministratorController</servlet-name>
         <servlet-class>controller.AdministratorController</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>AdministratorTabController</servlet-name>
+        <servlet-class>controller.AdministratorTabController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
     </servlet-mapping>
-      
     <servlet-mapping>
         <servlet-name>AdministratorController</servlet-name>
         <url-pattern>/AdministratorController</url-pattern>
     </servlet-mapping>
-  
+    <servlet-mapping>
+        <servlet-name>AdministratorTabController</servlet-name>
+        <url-pattern>/AdministratorTabController</url-pattern>
+    </servlet-mapping>
     <session-config>
         <!-- Un temps volontairement court : 5 minutes -->
         <session-timeout>
             5
         </session-timeout>
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>LoginController</welcome-file>
     </welcome-file-list>

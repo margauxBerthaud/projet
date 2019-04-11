@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import model.Customer;
 import model.DAO;
 import model.DiscountCode;
+import model.Product;
 
 /**
  *
@@ -113,6 +116,15 @@ public class CustomerController extends HttpServlet {
 
                     }
                     break;
+                case "SHOW_PRODUIT":
+                    List<String> listeProduit = dao.tousLesProduits();
+                    newSession.setAttribute("listeProduit", listeProduit);
+                    request.getRequestDispatcher("WEB-INF/produits.jsp").forward(request, response);
+                    break;
+
+                case "SHOW_CLIENT":
+                    request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                    break;
 
             }
         } catch (Exception ex) {
@@ -156,7 +168,17 @@ public class CustomerController extends HttpServlet {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    	private String trouverUserDansSession(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		return (session == null) ? null : (String) session.getAttribute("userName");
+	}
+        
+        private void supprimerCode(String code) throws SQLException {
+		DAO dao = new DAO();
+                dao.deleteDiscountCode(code);
+		
+	}
 
     private ArrayList<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
         ArrayList<DiscountCode> listCustomerCode = new ArrayList();

@@ -52,7 +52,11 @@ public class AdministratorController extends HttpServlet {
         String date_debut_ctg= request.getParameter("date_debut_ctg");
         String date_fin_ctg = request.getParameter("date_fin_ctg");
         
-        //CA par ZIP (zone géographique)
+        //Ca par zone géographique
+        String date_debut_geo= request.getParameter("date_debut_geo");
+        String date_fin_geo = request.getParameter("date_fin_geo");
+        
+        //CA par ZIP 
         String date_debut_zip= request.getParameter("date_debut_zip");
         String date_fin_zip = request.getParameter("date_fin_zip");
         
@@ -66,6 +70,12 @@ public class AdministratorController extends HttpServlet {
                     session.setAttribute("productCA", dao.CAparDateEtCategorieProduit(date_debut_ctg, date_fin_ctg));
                     session.setAttribute("dateProductCode", "valable du " + date_debut_ctg+ " au " + date_fin_ctg);
                     
+                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    break;
+                    case "caByGeo":
+                    session.setAttribute("geoCA", dao.chiffreAffaireParEtat(date_debut_geo, date_fin_geo));
+                    session.setAttribute("dateGeo", "du " + date_debut_geo + " au " + date_fin_geo);
+
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
                 case "caByCli":
@@ -129,12 +139,18 @@ public class AdministratorController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
     private void doLogout(HttpServletRequest request) {
         // On termine la session 
         HttpSession session = request.getSession(false);
         if (session != null){
             session.invalidate();
         }
+    }
+    
+    private String findUserInSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return (session == null) ? null : (String) session.getAttribute("userName");
     }
     
 

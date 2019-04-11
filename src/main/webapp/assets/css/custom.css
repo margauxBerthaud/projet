@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10 avr. 2018, 16:53:34
+    Author     : gaussel
+*/
+
+.select-custom{
+    max-width: 165px;
+}
+
+.logout{
+    width: 90%!important;
+    margin: auto!important;
+}
+
+.nav-back{
+    background-color: rgba(229,115,115,0.5);
+}
+
+.banniere {
+    margin-top: -25px;
+}
+
+.rond{
+    border-radius: 50%;
+}
+
+.card-custom{
+    background-color: transparent!important;
+    border-color: transparent!important;
+    box-shadow:  0 0px 0px rgba(0, 0, 0, 0.05), 0 0 0 0px rgba(63, 63, 68, 0.1);
+}
+
+.img-responsive .centree {
+ margin: 0 auto!important;
+}

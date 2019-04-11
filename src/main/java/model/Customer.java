@@ -5,6 +5,7 @@
  */
 package model;
 
+
 /**
  *
  * @author hbroucke
@@ -23,10 +24,6 @@ public class Customer {
     public String EMAIL;
     public int CREDIT_LIMIT;
     public String PASSWORD;
-    
-    public Customer(){
-
-    }
     
     public int getCUSTOMER_ID() {
         return CUSTOMER_ID;
@@ -131,4 +128,8 @@ public class Customer {
     public void setPassword(String password) {
         this.PASSWORD = password;
     }   
+
 }
+
+    
+

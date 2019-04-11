@@ -5,6 +5,7 @@
  */
 package model;
 
+import static com.sun.javafx.scene.control.skin.FXVK.Type.EMAIL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,6 +70,17 @@ public class DAO {
             }
             return discount;
         }
+    }
+    
+    public int deleteDiscountCode(String code) throws SQLException {
+        int resultat2 = 0;
+        String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
+        try (Connection connection = myDataSource.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, code);
+            resultat2 = stmt.executeUpdate();
+        }
+        return resultat2;
     }
 
     /**
@@ -444,6 +456,7 @@ public class DAO {
         }
         return resultat;
     }
+    
 
     /**
      * Fonction permettant de connaître le chiffre d'affaire en fonction de la
@@ -698,5 +711,59 @@ public class DAO {
             resultat = stmt.executeUpdate();
         }
         return resultat;
+    }
+    /**
+     * 
+     * @param deb date de début d'analyse
+     * @param fin date de fin d'analyse 
+     * @return le chiffre d'affaires représenté par état
+     * @throws SQLException 
+     */
+    public Map<String, Double> chiffreAffaireParEtat(String deb, String fin) throws SQLException {
+        Map<String, Double> ret = new HashMap<>();
+        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, STATE FROM PURCHASE_ORDER"
+                + " INNER JOIN CUSTOMER"
+                + " USING (CUSTOMER_ID)"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
+
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed1 = null;
+            Date parsed2 = null;
+            try {
+                parsed1 = sdf.parse(deb);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                parsed2 = sdf.parse(fin);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(parsed1.getTime());
+            java.sql.Date data2 = new java.sql.Date(parsed2.getTime());
+
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String state = rs.getString("STATE");
+                double price = rs.getDouble("QUANTITY") * montantDisponible(rs.getInt("PRODUCT_ID"));
+                if (ret.containsKey(state)) {
+                    ret.put(state, ret.get(state) + price);
+                    System.out.println("nouveau ca  " + state + " est de " + ret.get(state));
+                } else {
+                    ret.put(state, price);
+                    System.out.println("ca = " + state + " est de " + price);
+                }
+
+            }
+        }
+
+        return ret;
     }
 }
