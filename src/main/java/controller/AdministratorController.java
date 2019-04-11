@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class AdministratorController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, ParseException {
         // Trouver l'évenemment qui appelle cette servlet
         String evenement = request.getParameter("evenement"); 
         HttpSession session = request.getSession();
@@ -108,6 +109,8 @@ public class AdministratorController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -126,6 +129,8 @@ public class AdministratorController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -134,10 +139,7 @@ public class AdministratorController extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
 
     
     private void doLogout(HttpServletRequest request) {

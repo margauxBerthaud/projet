@@ -44,19 +44,19 @@ public class LoginController extends HttpServlet {
 		// Est-ce que l'utilisateur est connecté ?
 		// On cherche l'attribut userName dans la session
 		String userName = findUserInSession(request);
-		String jspView;
+		String jspView = null;
 		if (null == userName) { // L'utilisateur n'est pas connecté
 			// On choisit la page de login
 			jspView = "login.jsp";
 
 		}  else if ("admin".equals(userName)){
-                    jspView = "admin.jsp";
+                    jspView = "WEB-INF/customer.jsp";
 
                 
                 } 
-                else { // L'utilisateur est connecté
+                else if(!"admin".equals(userName)) { // L'utilisateur est connecté
 			// On choisit la page d'affichage
-			jspView = "customer.jsp";
+			jspView = "WEB-INF/admin.jsp";
 		}
 		// On va vers la page choisie
 		request.getRequestDispatcher(jspView).forward(request, response);
@@ -105,10 +105,7 @@ public class LoginController extends HttpServlet {
 	 *
 	 * @return a String containing servlet description
 	 */
-	@Override
-	public String getServletInfo() {
-		return "Servlet pour le controller du login";
-	}// </editor-fold>
+
 
 	private void checkLogin(HttpServletRequest request) throws SQLException {
                 // Interaction avec la base de données
@@ -150,7 +147,12 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("solde", solde);
                         session.setAttribute("codes", viewCodes(request));
                     } 
-                    
+                    else if (login.equals("nodata")){
+                        request.setAttribute("errorMessage", "Login/Password incorrect");
+                    }
+                    else if ("".equals(loginParam) || "".equals(passwordParam)){ // On positionne un message d'erreur pour l'afficher dans la JSP
+                            request.setAttribute("errorMessage", "Login/Password incorrect");
+                    }
                     else{
                         request.setAttribute("errorMessage", "Login/Password incorrect");
                     }

@@ -116,7 +116,7 @@ public class CustomerController extends HttpServlet {
                         dao.virement(Integer.parseInt(password), montantVerser);
                         solde = dao.montantDisponible(Integer.parseInt(password));
                         newSession.setAttribute("solde", solde);
-                        request.setAttribute("message", "Virement de : " + montantVerser + "€ débiter sur votre compte client.");
+                        request.setAttribute("message", "Virement de : " + montantVerser + "$ débiter sur votre compte client.");
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     } catch (SQLIntegrityConstraintViolationException e) {
 

@@ -244,7 +244,7 @@
                                             
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="comm" items="${commande}">
+                                                <c:forEach var="comm" items="${commandes}">
                                                     <tr>
                                                 <form method='POST' action="customerController">
                                                     <td >

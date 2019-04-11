@@ -5,7 +5,7 @@
  */
 package model;
 
-import static com.sun.javafx.scene.control.skin.FXVK.Type.EMAIL;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+
 
 /**
  *
@@ -82,7 +83,26 @@ public class DAO {
         }
         return discount;
     }
+    
+    public List<DiscountCode> allCodes() throws SQLException {
 
+        List<DiscountCode> result = new LinkedList<>();
+
+        String sql = "SELECT * FROM DISCOUNT_CODE ORDER BY DISCOUNT_CODE";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("DISCOUNT_CODE");
+                float rate = rs.getFloat("RATE");
+                DiscountCode c = new DiscountCode(id, rate);
+                result.add(c);
+
+            }
+        }
+        return result;
+    }
     /**
      * Fonction permet de calculer le prix d'une commande
      *
@@ -116,9 +136,16 @@ public class DAO {
      */
     public List<PurchaseOrder> commandesClient(Customer c) throws SQLException {
         List<PurchaseOrder> resultat = new LinkedList<>();
-        String sql = "SELECT ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY, SHIPPING_COST, SALES_DATE, SHIPPING_DATE, PRODUCT.DESCRIPTION FROM CUSTOMER INNER JOIN PURCHASE_ORDER ON CUSTOMER.ID=PURCHASE_ORDER.CUSTOMER_ID WHERE CUSTOMER_ID=?";
+        int id = Integer.parseInt(c.getPassword());
+        String sql = "SELECT ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY, SHIPPING_DATE, DESCRIPTION FROM PURCHASE_ORDER"
+                + " INNER JOIN CUSTOMER"
+                + " USING(CUSTOMER_ID)"
+                + " INNER JOIN PRODUCT"
+                + " USING (PRODUCT_ID)"
+                + " WHERE CUSTOMER_ID = ? ";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int numComm = rs.getInt("ORDER_NUM");
@@ -129,6 +156,7 @@ public class DAO {
                 Date date = rs.getDate("SHIPPING_DATE");
                 String description = rs.getString("DESCRIPTION");
                 PurchaseOrder commande = new PurchaseOrder(numComm, numClient, quantite);
+                System.out.println("le prix est : " + remise);
                 commande.setSHIPPING_DATE(date);
                 commande.setSHIPPING_COST(remise);
                 resultat.add(commande);
@@ -162,10 +190,11 @@ public class DAO {
      *
      */
     public double montantDisponible(int c) throws SQLException {
-        int resultat = 0;
+        double resultat = 0;
         String sql = "SELECT CREDIT_LIMIT FROM CUSTOMER WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, c);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 resultat = rs.getInt("CREDIT_LIMIT");
@@ -336,7 +365,7 @@ public class DAO {
     public List<DiscountCode> codesClients(Customer c) throws SQLException {
         List<DiscountCode> dc = new LinkedList<>();
         int id = Integer.parseInt(c.getPassword());
-        String sql = "SELECT * FROM DISCOUNT_CODE INNER JOIN CUSTOMER USING DISCOUNT_CODE WHERE CUSTOMER_ID=? ";
+        String sql = "SELECT * FROM DISCOUNT_CODE"+ "INNER JOIN CUSTOMER"+ "USING DISCOUNT_CODE"+ "WHERE CUSTOMER_ID=? ";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -535,6 +564,7 @@ public class DAO {
         double solde = this.montantDisponible(customer_id);
         if (solde >= prixCommande(product_id, quantity, customer_id)) {
             resultat = true;
+            System.out.println("Voila le prix "+ prixCommande(product_id,quantity,customer_id));
         }
         return resultat;
     }
