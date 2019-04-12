@@ -438,8 +438,7 @@ public String nameCustomer(int customer_id) throws SQLException{
     }
 
     /**
-     * Fonction permettant de connaître le chiffre d'affaire en fonction de la
-     * zone géographique du client
+     * Fonction permettant de connaître le chiffre d'affaire en fonction de l'état
      *
      * @param dateD
      * @param dateF
