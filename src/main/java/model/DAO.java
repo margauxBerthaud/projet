@@ -371,7 +371,21 @@ public class DAO {
         }
         return dc;
     }
+public String nameCustomer(int customer_id) throws SQLException{
+    String resultat = "";
+        String sql = "SELECT NAME FROM CUSTOMER WHERE CUSTOMER_ID = ?";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, customer_id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                resultat = rs.getString("NAME");
 
+            }
+        }
+
+        return resultat;
+}
     /**
      * Fonction permettant de connaître le chiffre d'affaire en fonction du
      * client
@@ -383,10 +397,8 @@ public class DAO {
      */
     public Map<String, Double> CAParDateEtClient(String dateD, String dateF) throws SQLException {
         Map<String, Double> resultat = new HashMap<>();
-        String sql = "SELECT CUSTOMER.NAME, SUM(QUANTITY) AS SALES \n"
-                + "FROM CUSTOMER INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
-                + "INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
-                + "WHERE SHIPPING_DATE<=? AND SHIPPING_DATE>=?  GROUP BY CUSTOMER.\"NAME\";";
+        String sql = "SELECT CUSTOMER_ID, PRODUCT_ID, QUANTITY FROM PURCHASE_ORDER"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -411,8 +423,8 @@ public class DAO {
             stmt.setDate(2, data2);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String client = rs.getString("NAME");
-                double prix = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                String client = nameCustomer(rs.getInt("CUSTOMER_ID"));
+                double prix = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (resultat.containsKey(client)) {
                     resultat.put(client, prix + resultat.get(client));
                 } else {
