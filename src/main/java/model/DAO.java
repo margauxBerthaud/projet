@@ -446,13 +446,12 @@ public String nameCustomer(int customer_id) throws SQLException{
      * @return
      * @throws java.sql.SQLException
      */
-    public Map<String, Double> CAParDateEtZoneClient(String dateD, String dateF) throws SQLException {
+    public Map<String, Double> CAParDateEtEtat(String dateD, String dateF) throws SQLException {
         Map<String, Double> resultat = new HashMap<>();
-        String sql = "SELECT CITY,COUNT(QUANTITY) AS SALES FROM CUSTOMER \n"
-                + "                INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
-                + "                INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
-                + "                WHERE SALES_DATE<=? AND SALES_DATE>=?\n"
-                + "                GROUP BY CITY";
+        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, STATE FROM PURCHASE_ORDER"
+                + " INNER JOIN CUSTOMER"
+                + " USING (CUSTOMER_ID)"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -477,12 +476,14 @@ public String nameCustomer(int customer_id) throws SQLException{
             stmt.setDate(2, data2);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String ville = rs.getString("CITY");
-                double prix = rs.getFloat("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                if (resultat.containsKey(ville)) {
-                    resultat.put(ville, resultat.get(ville) + prix);
+                String state = rs.getString("STATE");
+                double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                if (resultat.containsKey(state)) {
+                    resultat.put(state, resultat.get(state) + price);
+                    
                 } else {
-                    resultat.put(ville, prix);
+                    resultat.put(state, price);
+                    
                 }
 
             }
