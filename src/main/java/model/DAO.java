@@ -206,7 +206,7 @@ public class DAO {
      * Fonction permettant d'afficher infos disponibles selon le client
      *
      */
-    public String infosDisponibles(Customer c) throws SQLException {
+    public String infosDisponibles() throws SQLException {
         String resultat = null;
         String sql = "SELECT NAME, ADRESSLINE1, ADRESSLINE2, CITY, STATE, PHONE, FAX, EMAIL FROM CUSTOMER WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
