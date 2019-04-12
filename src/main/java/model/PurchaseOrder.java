@@ -16,7 +16,7 @@ public class PurchaseOrder {
     public int CUSTOMER_ID;
     public int PRODUCT_ID;
     public int QUANTITY;
-    public float SHIPPING_COST;
+    public double SHIPPING_COST;
     public Date SALES_DATE;
     public Date SHIPPING_DATE;
     public String FREIGHT_COMPANY;
@@ -60,11 +60,11 @@ public class PurchaseOrder {
         this.QUANTITY = QUANTITY;
     }
 
-    public float getSHIPPING_COST() {
+    public double getSHIPPING_COST() {
         return SHIPPING_COST;
     }
 
-    public void setSHIPPING_COST(float SHIPPING_COST) {
+    public void setSHIPPING_COST(double SHIPPING_COST) {
         this.SHIPPING_COST = SHIPPING_COST;
     }
     
