@@ -227,7 +227,7 @@ public class DAO {
      *
      */
     public String getDescription(int product_id) throws SQLException {
-        String resultat = null;
+        String resultat = "";
         String sql = "SELECT DESCRIPTION FROM PRODUCT_CODE WHERE PRODUCT_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -248,14 +248,14 @@ public class DAO {
      * @return
      * @throws java.sql.SQLException
      */
-    public float recupererPrix(int product_id) throws SQLException {
-        float resultat = 0;
+    public double recupererPrix(int product_id) throws SQLException {
+        double resultat = 0;
         String sql = "SELECT PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                resultat = rs.getFloat("PURCHASE_COST");
+                resultat = rs.getDouble("PURCHASE_COST");
             }
         }
         return resultat;
