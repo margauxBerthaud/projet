@@ -45,9 +45,13 @@ public class AdministratorController extends HttpServlet {
         List<String> prod = dao.tousLesProduits();
         request.setAttribute("Listeproduits", prod);
         
+        // pour le CA par produit
+        String date_debut_prod = request.getParameter("date_debut_prod");
+        String date_fin_prod = request.getParameter("date_fin_prod");
+        
         // CA par Client
         String date_debut_clt= request.getParameter("date_debut_clt");
-        String date_fin_clt = request.getParameter("date_fin_zip");
+        String date_fin_clt = request.getParameter("date_fin_clt");
         
         // CA par catégorie d'article
         String date_debut_ctg= request.getParameter("date_debut_ctg");
@@ -63,7 +67,7 @@ public class AdministratorController extends HttpServlet {
         
         if (null != evenement){
             switch (evenement){
-                case "logout":
+                case "Logout":
                     doLogout(request);
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     break;
@@ -73,7 +77,13 @@ public class AdministratorController extends HttpServlet {
                     
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
-                    case "caByGeo":
+                case "caByProduct":
+                    session.setAttribute("productCA", dao.chiffreAffaireByProduct(date_debut_prod, date_fin_prod));
+                    session.setAttribute("dateProduct", "du " + date_debut_prod + " au " + date_fin_prod);
+
+                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+                    break;
+                case "caByGeo":
                     session.setAttribute("geoCA", dao.chiffreAffaireParEtat(date_debut_geo, date_fin_geo));
                     session.setAttribute("dateGeo", "du " + date_debut_geo + " au " + date_fin_geo);
 

@@ -135,7 +135,7 @@ public class CustomerController extends HttpServlet {
 
             }
         } catch (Exception ex) {
-            Logger.getLogger("customerController").log(Level.SEVERE, "Action en erreur", ex);
+            Logger.getLogger("CustomerController").log(Level.SEVERE, "Action en erreur", ex);
             request.setAttribute("message", ex.getMessage());
         }
     }

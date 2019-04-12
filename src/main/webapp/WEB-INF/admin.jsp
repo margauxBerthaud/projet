@@ -53,7 +53,7 @@
     <body>
 
         <div class="wrapper">
-                <div class="sidebar" data-color="soso" data-image="assets/img/sidebar-4.jpg">
+                <div class="sidebar" data-color="blue" data-image="assets/img/sidebar-2.jpg">
                 
                 <!--
             
@@ -85,7 +85,7 @@
                         </li>
                         <li>
                             <form class="logout" action="LoginController" method="POST">
-                                <input class="form-control " type='submit' name='action' value='DECONNEXION'>
+                                <input class="form-control " type='submit' name='action' value='Logout'>
                             </form>
                         </li>
 
@@ -119,9 +119,9 @@
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Produit</h4>                                     
                                         <form method='POST' action="AdminController">
-                                            <input type="date" class="choixdate" name="date_debut">
-                                            <input type="date" class="choixdate" name="date_fin">
-                                            <input type="hidden" name="action" value="caByProduct">
+                                            <input type="date" class="choixdate" name="date_debut_prod">
+                                            <input type="date" class="choixdate" name="date_fin_prod">
+                                            <input type="hidden" name="evenement" value="caByProduct">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -168,9 +168,9 @@
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Client</h4>                                       
                                         <form method='POST' action="AdminController">
-                                            <input type="date" class="choixdate" name="date_debut_cli">
-                                            <input type="date" class="choixdate" name="date_fin_cli">
-                                            <input type="hidden" name="action" value="caByCli">
+                                            <input type="date" class="choixdate" name="date_debut_clt">
+                                            <input type="date" class="choixdate" name="date_fin_clt">
+                                            <input type="hidden" name="evenement" value="caByCli">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -191,10 +191,10 @@
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Catégorie d'article</h4>
    
-                                        <form method='POST' action="AdminController">
-                                            <input type="date" class="choixdate" name="date_debut_cat">
-                                            <input type="date" class="choixdate" name="date_fin_cat">
-                                            <input type="hidden" name="action" value="caByProductCode">
+                                        <form method='POST' action="AdministratorController">
+                                            <input type="date" class="choixdate" name="date_debut_ctg">
+                                            <input type="date" class="choixdate" name="date_fin_ctg">
+                                            <input type="hidden" name="evenement" value="caByProductCode">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -220,7 +220,7 @@
                                         <form method='POST' action="AdminController">
                                             <input type="date" class="choixdate" name="date_debut_zip">
                                             <input type="date" class="choixdate" name="date_fin_zip">
-                                            <input type="hidden" name="action" value="caByZip">
+                                            <input type="hidden" name="evenement" value="caByZip">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>

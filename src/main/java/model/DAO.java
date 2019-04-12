@@ -171,8 +171,8 @@ public class DAO {
      * de liste
      *
      */
-    public List<String> tousLesProduits() throws SQLException {
-        List<String> resultat = new LinkedList<>();
+    public ArrayList<String> tousLesProduits() throws SQLException {
+        ArrayList<String> resultat = new ArrayList<>();
         String sql = "SELECT DESCRIPTION FROM PRODUCT WHERE QUANTITY_ON_HAND>0";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -236,7 +236,7 @@ public class DAO {
      */
     public String getDescription(int product_id) throws SQLException {
         String resultat = null;
-        String sql = "SELECT DESCRIPTION FROM PRODUCT_CODE WHERE PROD_CODE=?";
+        String sql = "SELECT DESCRIPTION FROM PRODUCT_CODE WHERE PRODUCT_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, product_id);
@@ -796,4 +796,46 @@ public class DAO {
 
         return ret;
     }
+    
+    public Map<String, Double> chiffreAffaireByProduct(String DEB, String FIN) throws SQLException {
+        Map<String, Double> res = new HashMap<>();
+        String sql = "SELECT PRODUCT_ID, SUM(QUANTITY) AS SALES FROM PURCHASE_ORDER"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?"
+                + " GROUP BY PRODUCT_ID";
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed1 = null;
+            Date parsed2 = null;
+            try {
+                parsed1 = SDF.parse(DEB);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                parsed2 = SDF.parse(FIN);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(parsed1.getTime());
+            java.sql.Date data2 = new java.sql.Date(parsed2.getTime());
+            System.out.println("Le Chiffre d'affaire est de ------------------------------------------------------------------ " + data1);
+            System.out.println("Le chiffre d'affaire est de ------------------------------------------------------------------ " + data2);
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String product = getDescription(rs.getInt("PRODUCT_ID"));
+                double price = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                res.put(product, price);
+                System.out.println("Le Ca est de ------------------------------------------------------------------ " + price);
+            }
+        }
+
+        return res;
+    }
+    
 }

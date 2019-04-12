@@ -61,14 +61,14 @@
                     <ul class="nav">
 
                         <li >
-                            <a href="customerController?action=SHOW_CLIENT">
+                            <a href="CustomerController?evenement=SHOW_CLIENT">
                                 <i class="pe-7s-user"></i>
                                 <p>Votre Profil</p>
                             </a>
                         </li>
 
                         <li class="active">
-                            <a href="customerController?action=SHOW_PRODUIT">
+                            <a href="CustomerController?evenement=SHOW_PRODUIT">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>Liste des Produits</p>
 
@@ -77,7 +77,7 @@
 
                         <li>
                             <form class="logout" action="LoginController" method="POST">
-                                <input class="form-control " type='submit' name='action' value='DECONNEXION'>
+                                <input class="form-control " type='submit' name='evenement' value='Logout'>
                             </form>
                         </li>
 
@@ -131,7 +131,7 @@
                                                     <div class="form-group">
                                                         <label>Somme à verser</label>
                                                         <input type="text" class="form-control" placeholder="montant" name="montant">
-                                                        <input type="hidden" name="action" value="DO_VIREMENT">
+                                                        <input type="hidden" name="evenement" value="DO_VIREMENT">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -151,7 +151,7 @@
                                         <h4 class="title">Effectuer une commande : </h4>
                                     </div>
                                     <div class="content">
-                                        <form method='POST' action="customerController">
+                                        <form method='POST' action="CustomerController">
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <div class="form-group">
@@ -168,7 +168,7 @@
                                                     <div class="form-group">
                                                         <label>Quantité</label>
                                                         <input type="text" class="form-control" placeholder="Quantite" value="" name="quantite">
-                                                        <input type="hidden" name="action" value="ADD_COMMANDE">
+                                                        <input type="hidden" name="evenement" value="ADD_COMMANDE">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">

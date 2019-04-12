@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public class LoginController extends HttpServlet {
 				case "login":
 					checkLogin(request);
 					break;
-				case "logout":
+				case "Logout":
 					doLogout(request);
 					break;
 			}
@@ -49,12 +50,12 @@ public class LoginController extends HttpServlet {
 			// On choisit la page de login
 			jspView = "login.jsp";
 
-		}  else if ("admin".equals(userName)){
+		}  else if (!"admin".equals(userName)){
                     jspView = "WEB-INF/customer.jsp";
 
                 
                 } 
-                else if(!"admin".equals(userName)) { // L'utilisateur est connecté
+                else if("admin".equals(userName)) { // L'utilisateur est connecté
 			// On choisit la page d'affichage
 			jspView = "WEB-INF/admin.jsp";
 		}
@@ -141,7 +142,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("userAddress", address);
                         session.setAttribute("userPhone", phone);
                         session.setAttribute("commandes", dao.commandesClient(c));  
-                        List<String> des = dao.tousLesProduits();
+                        ArrayList<String> des = dao.tousLesProduits();
                         request.setAttribute("listeProduits", des);
                         Double solde = dao.montantDisponible(Integer.parseInt(password));
                         session.setAttribute("solde", solde);
