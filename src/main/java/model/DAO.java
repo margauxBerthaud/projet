@@ -36,8 +36,7 @@ public class DAO {
      * @param dataSource la source de données à utiliser
      */
     public DAO() {
-        DataSource dataSource = null;
-        this.myDataSource = dataSource;
+        this.myDataSource = DataSourceFactory.getDataSource();
     }
 
     public int faireVirement(int id, double montant) throws SQLException {
