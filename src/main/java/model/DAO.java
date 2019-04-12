@@ -57,15 +57,15 @@ public class DAO {
      * Fonction permettant de récupérer la valeur du taux de remise en passant
      * en paramètre le client
      */
-    private float valeur_discount_code(int customerID) throws SQLException {
-        float discount = 0;
+    public double valeur_discount_code(int customerID) throws SQLException {
+        double discount = 0;
         String sql = "SELECT DISCOUNT_CODE.RATE FROM DISCOUNT_CODE INNER JOIN CUSTOMER ON DISCOUNT_CODE.DISCOUNT_CODE=CUSTOMER.DISCOUNT_CODE WHERE CUSTOMER_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, customerID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                float taux = rs.getByte("RATE");
+                double taux = rs.getByte("RATE");
                 discount = taux;
             }
             return discount;
