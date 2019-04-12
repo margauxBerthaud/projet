@@ -207,23 +207,16 @@ public class DAO {
      *
      */
     public String infosDisponibles() throws SQLException {
-        String resultat = null;
-        String sql = "SELECT NAME, ADRESSLINE1, ADRESSLINE2, CITY, STATE, PHONE, FAX, EMAIL FROM CUSTOMER WHERE CUSTOMER_ID=?";
+        String resultat = "";
+        String sql = "SELECT EMAIL, CUSTOMER_ID FROM CUSTOMER";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String nom = rs.getString("NAME");
-                String adresse1 = rs.getString("ADRESSLINE1");
-                String adresse2 = rs.getString("ADRESSLINE2");
-                String ville = rs.getString("CITY");
-                String etat = rs.getString("STATE");
-                String tel = rs.getString("PHONE");
-                String fax = rs.getString("FAX");
                 String email = rs.getString("EMAIL");
+                int id =rs.getInt("CUSTOMER_ID");
                 String newLine = System.getProperty("line.separator");
-                resultat = " " + nom + newLine + adresse1 + " " + adresse2 + newLine + ville + newLine + etat + newLine + tel + newLine + fax + newLine + email;
-            }
+                resultat = " " + email+ "id :  " + id;         }
         }
         return resultat;
     }
