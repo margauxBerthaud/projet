@@ -68,7 +68,7 @@
                         </li>
 
                         <li>
-                            <a href="CustomerController?evenement=SHOW_PRODUIT">
+                            <a href="CustomerController?action=SHOW_PRODUIT">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>Liste des Produits</p>
 
@@ -77,7 +77,7 @@
 
                         <li>
                             <form class="logout" action="LoginController" method="POST">
-                                <input class="form-control " type='submit' name='evenement' value='Logout'>
+                                <input class="form-control " type='submit' name='action' value='Logout'>
                             </form>
                         </li>
 
@@ -132,7 +132,7 @@
                                                     <div class="form-group">
                                                         <label>Somme à verser</label>
                                                         <input type="text" class="form-control" placeholder="montant" name="montant">
-                                                        <input type="hidden" name="evenement" value="DO_VIREMENT">
+                                                        <input type="hidden" name="action" value="DO_VIREMENT">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -169,7 +169,7 @@
                                                     <div class="form-group">
                                                         <label>Quantité</label>
                                                         <input type="text" class="form-control" placeholder="Quantite" value="" name="quantite">
-                                                        <input type="hidden" name="evenement" value="ADD_COMMANDE">
+                                                        <input type="hidden" name="action" value="ADD_COMMANDE">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -256,7 +256,7 @@
                                                     </td>
                                                     <td >
                                                         <input name="quantityToEdit" id="${comm.QUANTITY}" type="text" class="validate" value ="${comm.QUANTITY}">
-                                                        <input type="hidden" name="evenement" value="EDIT_COMMANDE">
+                                                        <input type="hidden" name="action" value="EDIT_COMMANDE">
                                                     </td>
                                                     
                                                      <td>
@@ -278,7 +278,7 @@
                                                     <form method='POST' action="CustomerController">
                                                     <td>
                                                         <input hidden name="purchaseToDelete" id="${comm.ORDER_NUM}" type="text" class="validate" value="${comm.ORDER_NUM}">
-                                                        <input type="hidden" name="evenement" value="DELETE_COMMANDE">
+                                                        <input type="hidden" name="action" value="DELETE_COMMANDE">
                                                         <button type="submit" class="btn btn-info btn-fill pull-left">Delete <i class="fa fa-trash"></i></button>
                                                            
                                                         </a>

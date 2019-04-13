@@ -118,10 +118,10 @@
 
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Produit</h4>                                     
-                                        <form method='POST' action="AdminController">
+                                        <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_prod">
                                             <input type="date" class="choixdate" name="date_fin_prod">
-                                            <input type="hidden" name="evenement" value="caByProduct">
+                                            <input type="hidden" name="action" value="caByProduct">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -144,7 +144,7 @@
                                         
                                     </div>
                                     <div class="content">
-                                        <form method='POST' action="AdminController">
+                                        <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_geo">
                                             <input type="date" class="choixdate" name="date_fin_geo">
                                             <input type="hidden" name="action" value="caByGeo">
@@ -167,10 +167,10 @@
                                 <div class="card ">
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Client</h4>                                       
-                                        <form method='POST' action="AdminController">
+                                        <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_clt">
                                             <input type="date" class="choixdate" name="date_fin_clt">
-                                            <input type="hidden" name="evenement" value="caByCli">
+                                            <input type="hidden" name="action" value="caByCli">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -194,7 +194,7 @@
                                         <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_ctg">
                                             <input type="date" class="choixdate" name="date_fin_ctg">
-                                            <input type="hidden" name="evenement" value="caByProductCode">
+                                            <input type="hidden" name="action" value="caByProductCode">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>
@@ -217,10 +217,10 @@
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par ZIP (Code postal)</h4>
                                         
-                                        <form method='POST' action="AdminController">
+                                        <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_zip">
                                             <input type="date" class="choixdate" name="date_fin_zip">
-                                            <input type="hidden" name="evenement" value="caByZip">
+                                            <input type="hidden" name="action" value="caByZip">
                                             <input type="submit" value="Envoyer">
                                         </form>
                                     </div>

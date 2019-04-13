@@ -45,7 +45,7 @@ public class CustomerController extends HttpServlet {
         //Ouvrir une session appelle cette servlet
         HttpSession newSession = request.getSession();
         DAO dao = new DAO();
-        String evenement = request.getParameter("evenement");
+        String action = request.getParameter("action");
 
         //Ajouter commandes
         String quantite = request.getParameter("quantite");
@@ -67,7 +67,7 @@ public class CustomerController extends HttpServlet {
             Customer c = new Customer();
             c.setPassword(password);
             newSession.setAttribute("codes", voirCodesClient(request));
-            switch (evenement) {
+            switch (action) {
                 
                 case "ADD_ORDER":
                     dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));

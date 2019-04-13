@@ -61,14 +61,14 @@
                     <ul class="nav">
 
                         <li >
-                            <a href="CustomerController?evenement=SHOW_CLIENT">
+                            <a href="CustomerController?action=SHOW_CLIENT">
                                 <i class="pe-7s-user"></i>
                                 <p>Votre Profil</p>
                             </a>
                         </li>
 
                         <li class="active">
-                            <a href="CustomerController?evenement=SHOW_PRODUIT">
+                            <a href="CustomerController?action=SHOW_PRODUIT">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>Liste des Produits</p>
 
@@ -77,7 +77,7 @@
 
                         <li>
                             <form class="logout" action="LoginController" method="POST">
-                                <input class="form-control " type='submit' name='evenement' value='Logout'>
+                                <input class="form-control " type='submit' name='action' value='Logout'>
                             </form>
                         </li>
 
@@ -126,12 +126,12 @@
                                                     <input type="text" class="form-control" disabled placeholder="Company" value="<fmt:formatNumber value = "${solde}" type = "currency"/> ">
                                                 </div>
                                             </div>
-                                            <form method='POST' action="customerController">
+                                            <form method='POST' action="CustomerController">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Somme à verser</label>
                                                         <input type="text" class="form-control" placeholder="montant" name="montant">
-                                                        <input type="hidden" name="evenement" value="DO_VIREMENT">
+                                                        <input type="hidden" name="action" value="DO_VIREMENT">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -168,7 +168,7 @@
                                                     <div class="form-group">
                                                         <label>Quantité</label>
                                                         <input type="text" class="form-control" placeholder="Quantite" value="" name="quantite">
-                                                        <input type="hidden" name="evenement" value="ADD_COMMANDE">
+                                                        <input type="hidden" name="action" value="ADD_COMMANDE">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">

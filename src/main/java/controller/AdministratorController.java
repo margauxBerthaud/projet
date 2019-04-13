@@ -40,7 +40,7 @@ public class AdministratorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ParseException {
         // Trouver l'évenemment qui appelle cette servlet
-        String evenement = request.getParameter("evenement"); 
+        String action = request.getParameter("action"); 
         HttpSession session = request.getSession();
         DAO dao = new DAO();
         
@@ -67,8 +67,8 @@ public class AdministratorController extends HttpServlet {
         String date_debut_zip= request.getParameter("date_debut_zip");
         String date_fin_zip = request.getParameter("date_fin_zip");
         
-        if (null != evenement){
-            switch (evenement){
+        if (null != action){
+            switch (action){
                 case "Logout":
                     doLogout(request);
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -97,7 +97,7 @@ public class AdministratorController extends HttpServlet {
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
                 case "caByZip":
-                    session.setAttribute("zipCA", dao.CAParDateEtClient(date_debut_zip, date_fin_zip));
+                    session.setAttribute("zipCA", dao.chiffreAffaireByZip(date_debut_zip, date_fin_zip));
                     session.setAttribute("datezip", "valade du " + date_debut_zip + " au " + date_fin_zip);
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                     break;
@@ -120,7 +120,7 @@ public class AdministratorController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,7 +140,7 @@ public class AdministratorController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(AdministratorController.class.getName()).log(Level.SEVERE, null, ex);
         }

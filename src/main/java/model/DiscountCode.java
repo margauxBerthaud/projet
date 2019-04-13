@@ -10,8 +10,8 @@ package model;
  * @author hbroucke
  */
 public class DiscountCode {
-    public String DISCOUNT_CODE;
-    public float RATE;
+    private String DISCOUNT_CODE;
+    private float RATE;
     
     public DiscountCode(String DISCOUNT_CODE, float Rate){
         this.DISCOUNT_CODE = DISCOUNT_CODE;
