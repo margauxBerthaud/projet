@@ -11,14 +11,14 @@ package model;
  * @author hbroucke
  */
 public class Customer {
-    public String NAME;
-    public String ADDRESSLINE1;
-    public String CITY;
-    public String STATE;
-    public String PHONE;
-    public String EMAIL;
-    public int CREDIT_LIMIT;
-    public String PASSWORD;
+    private String NAME;
+    private String ADDRESSLINE1;
+    private String CITY;
+    private String STATE;
+    private String PHONE;
+    private String EMAIL;
+    private int CREDIT_LIMIT;
+    private String PASSWORD;
     
     public Customer(){
         

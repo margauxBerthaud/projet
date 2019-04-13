@@ -253,6 +253,7 @@ public class DAO {
         String sql = "SELECT PURCHASE_COST FROM PRODUCT WHERE PRODUCT_ID=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, product_id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 resultat = rs.getDouble("PURCHASE_COST");
@@ -272,10 +273,12 @@ public class DAO {
      */
     public Map<String, Double> CAparDateEtCategorieProduit(String dateD, String dateF) throws SQLException {
         Map<String, Double> resultat = new HashMap();
-        String sql = "SELECT PROD_CODE, SUM(QUANTITY) AS SALES \n"
-                + "FROM PURCHASE_ORDER INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID \n"
-                + "INNER JOIN PRODUCT_CODE ON PRODUCT.PRODUCT_CODE=PRODUCT_CODE.PROD_CODE  \n"
-                + "WHERE SHIPPING_DATE>=? AND SHIPPING_DATE<=?  GROUP BY PROD_CODE";
+        String sql = "SELECT PURCHASE_ORDER.PRODUCT_ID, QUANTITY, PRODUCT_CODE.DESCRIPTION FROM PURCHASE_ORDER"
+                + " INNER JOIN PRODUCT"
+                + " USING (PRODUCT_ID)"
+                + " INNER JOIN PRODUCT_CODE"
+                + " ON PRODUCT.PRODUCT_CODE = PRODUCT_CODE.PROD_CODE"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -300,9 +303,15 @@ public class DAO {
             stmt.setDate(2, data2);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String produit = getDescription(rs.getInt("PROD_CODE"));
-                double prix = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                resultat.put(produit, prix);
+                String state = rs.getString("DESCRIPTION");
+                double prix = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                if (resultat.containsKey(state)) {
+                    resultat.put(state, resultat.get(state) + prix);
+                    System.out.println("nouveau ca  " + state + " est de " + resultat.get(state));
+                } else {
+                    resultat.put(state, prix);
+                    System.out.println("ca = " + state + " est de " + prix);
+                }
 
             }
 
@@ -316,15 +325,16 @@ public class DAO {
      * @return
      * @throws java.sql.SQLException
      */
-    public Customer connexionClient(String email) throws SQLException {
+    public Customer connexionClient(String EMAIL) throws SQLException {
         Customer c = new Customer();
         String sql = "SELECT * FROM CUSTOMER WHERE EMAIL=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, email);
+            stmt.setString(1, EMAIL);
             ResultSet rs = stmt.executeQuery();
+            System.out.println(rs);
             if (!rs.next()) {
-
+                System.out.println("no data");
                 c.setEMAIL("nodata");
                 c.setPassword("nodata");
                 c.setNAME("nodata");
@@ -332,8 +342,8 @@ public class DAO {
                 return c;
             } else {
                 do {
-
-                    c.setEMAIL(email);
+                    System.out.println(String.valueOf(rs.getInt("CUSTOMER_ID")));
+                    c.setEMAIL(EMAIL);
                     c.setPassword(String.valueOf(rs.getInt("CUSTOMER_ID")));
                     c.setNAME(rs.getString("NAME"));
                     c.setCITY(rs.getString("CITY"));
@@ -357,8 +367,12 @@ public class DAO {
     public List<DiscountCode> codesClients(Customer c) throws SQLException {
         List<DiscountCode> dc = new LinkedList<>();
         int id = Integer.parseInt(c.getPassword());
-        String sql = "SELECT * FROM DISCOUNT_CODE"+ "INNER JOIN CUSTOMER"+ "USING DISCOUNT_CODE"+ "WHERE CUSTOMER_ID=? ";
-        try (Connection connection = myDataSource.getConnection();
+        String sql = "SELECT * FROM DISCOUNT_CODE"
+                + " INNER JOIN CUSTOMER"
+                + " ON DISCOUNT_CODE.DISCOUNT_CODE = CUSTOMER.DISCOUNT_CODE"
+                + " WHERE CUSTOMER_ID = ? ";
+        try (
+                Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -427,8 +441,10 @@ public String nameCustomer(int customer_id) throws SQLException{
                 double prix = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (resultat.containsKey(client)) {
                     resultat.put(client, prix + resultat.get(client));
+                    System.out.println("nouveau chiffre d'affaire  " + client + " est de " + resultat.get(client));
                 } else {
                     resultat.put(client, prix);
+                    System.out.println("chiffre d'affaire = " + client + " est de " + prix);
                 }
 
             }
@@ -479,9 +495,11 @@ public String nameCustomer(int customer_id) throws SQLException{
                 double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (resultat.containsKey(state)) {
                     resultat.put(state, resultat.get(state) + price);
+                    System.out.println("nouveau chiffre d'affaire  " + state + " est de " + resultat.get(state));
                     
                 } else {
                     resultat.put(state, price);
+                    System.out.println("chiffre d'affaire = " + state + " est de " + price);
                     
                 }
 
@@ -686,22 +704,21 @@ public String nameCustomer(int customer_id) throws SQLException{
     public boolean editerCommande(int order_num, int quantity, int customer_id) throws SQLException {
         boolean resultat = false;
         int ancienneQuantite = this.ancienneQuantite(order_num);
-        if (quantity >= ancienneQuantite(order_num)) {
+        if (ancienneQuantite >= ancienneQuantite(order_num)) {
             this.virement(this.clientParNumCommande(order_num), this.prixCommande(ancienneQuantite - quantity,this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
             String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
             try (Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setInt(1, quantity);
                 stmt.setInt(2, order_num);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    resultat = true;
-                    int result = stmt.executeUpdate();
+                int result = stmt.executeUpdate();
+                resultat = true;
+                    
                 }
 
             }
 
-        } else {
+         else {
             int difference = quantity - ancienneQuantite;
             if (this.verifierSolde(customer_id, this.produitParNumCommande(order_num), difference)) {
                 this.miseAJourSolde(customer_id, prixCommande(difference, produitParNumCommande(order_num),customer_id));
@@ -841,5 +858,53 @@ public String nameCustomer(int customer_id) throws SQLException{
 
         return res;
     }
+        
+        public Map<String, Double> chiffreAffaireByZip(String deb, String fin) throws SQLException {
+        Map<String, Double> ret = new HashMap<>();
+        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, ZIP FROM PURCHASE_ORDER"
+                + " INNER JOIN CUSTOMER"
+                + " USING (CUSTOMER_ID)"
+                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
+
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed1 = null;
+            Date parsed2 = null;
+            try {
+                parsed1 = sdf.parse(deb);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+
+            }
+            try {
+                parsed2 = sdf.parse(fin);
+            } catch (ParseException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            java.sql.Date data1 = new java.sql.Date(parsed1.getTime());
+            java.sql.Date data2 = new java.sql.Date(parsed2.getTime());
+
+            stmt.setDate(1, data1);
+            stmt.setDate(2, data2);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String state = rs.getString("ZIP");
+                double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
+                if (ret.containsKey(state)) {
+                    ret.put(state, ret.get(state) + price);
+                    System.out.println("nouveau ca  " + state + " est de " + ret.get(state));
+                } else {
+                    ret.put(state, price);
+                    System.out.println("ca = " + state + " est de " + price);
+                }
+
+            }
+        }
+
+        return ret;
     
-}
+}}
+
