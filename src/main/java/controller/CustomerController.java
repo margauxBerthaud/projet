@@ -43,37 +43,40 @@ public class CustomerController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         //Ouvrir une session appelle cette servlet
-        HttpSession newSession = request.getSession();
+        HttpSession session = request.getSession();
         DAO dao = new DAO();
         String action = request.getParameter("action");
+        action = (action == null)? "" : action;
 
         //Ajouter commandes
         String quantite = request.getParameter("quantite");
         ArrayList<String> list = (ArrayList<String>) dao.tousLesProduits();
-        request.setAttribute("listeProduit", list);
+        request.setAttribute("listeProduits", list);
+        
 
         //Edition commande
         String purchaseToEdit = request.getParameter("purchaseToEdit");
 
         // Suppression Commandes
         String purchaseToDelete = request.getParameter("purchaseToDelete");
-        String password = (String) newSession.getAttribute("userPassword");
+        String password = (String) session.getAttribute("userPassword");
 
         //Information sur le client connecté
         Double solde = dao.montantDisponible(Integer.parseInt(password));
-        newSession.setAttribute("solde", solde);
-
+        session.setAttribute("solde", solde);
+        
+        request.setAttribute("codes", voirCodesClient(request));
         try {
             Customer c = new Customer();
             c.setPassword(password);
-            newSession.setAttribute("codes", voirCodesClient(request));
+            session.setAttribute("codes", voirCodesClient(request));
             switch (action) {
                 
                 case "ADD_ORDER":
                     dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));
-                    newSession.setAttribute("commandes", dao.commandesClient(c));
+                    session.setAttribute("commande", dao.commandesClient(c));
                     solde = dao.montantDisponible(Integer.parseInt(password));
-                    newSession.setAttribute("solde", solde);
+                    session.setAttribute("solde", solde);
                     request.setAttribute("message", "Vous avez commandez " + quantite + " " + request.getParameter("produit") + ".");
                     request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     break;
@@ -88,9 +91,9 @@ public class CustomerController extends HttpServlet {
                         } else {
                             request.setAttribute("message", "Pas assez d'argent" + purchaseToEdit);
                         }
-                        newSession.setAttribute("commandes", dao.commandesClient(c));
+                        session.setAttribute("commande", dao.commandesClient(c));
                         solde = dao.montantDisponible(Integer.parseInt(password));
-                        newSession.setAttribute("solde", solde);
+                        session.setAttribute("solde", solde);
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
 
                     } catch (SQLIntegrityConstraintViolationException e) {
@@ -102,7 +105,7 @@ public class CustomerController extends HttpServlet {
                 case "DELETE_ORDER":
                     try {
                         dao.supprimerCommande(Integer.parseInt(purchaseToDelete));
-                        newSession.setAttribute("commandes", dao.commandesClient(c));
+                        session.setAttribute("commande", dao.commandesClient(c));
                         request.setAttribute("message", "Commande " + purchaseToDelete + " Supprimée");
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     } catch (SQLIntegrityConstraintViolationException e) {
@@ -115,7 +118,7 @@ public class CustomerController extends HttpServlet {
                         int montantVerser = Integer.parseInt(request.getParameter("montant"));
                         dao.virement(Integer.parseInt(password), montantVerser);
                         solde = dao.montantDisponible(Integer.parseInt(password));
-                        newSession.setAttribute("solde", solde);
+                        session.setAttribute("solde", solde);
                         request.setAttribute("message", "Virement de : " + montantVerser + "$ débiter sur votre compte client.");
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
                     } catch (SQLIntegrityConstraintViolationException e) {
@@ -124,8 +127,8 @@ public class CustomerController extends HttpServlet {
                     break;
                     
                 case "SHOW_PRODUIT":
-                    List<String> listeProduit = dao.tousLesProduits();
-                    newSession.setAttribute("listeProduit", listeProduit);
+                    ArrayList<Product> listeProduit = dao.listProduct();
+                    session.setAttribute("listeProduit", listeProduit);
                     request.getRequestDispatcher("WEB-INF/produits.jsp").forward(request, response);
                     break;
 
@@ -187,14 +190,14 @@ public class CustomerController extends HttpServlet {
 		
 	}
 
-    private ArrayList<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
-        ArrayList<DiscountCode> listCustomerCode = new ArrayList();
+    private List<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
+        List<DiscountCode> listCustomerCode = new LinkedList();
         DAO dao = new DAO();
         HttpSession newSession = request.getSession();
         String password = (String) newSession.getAttribute("userPassword");
         Customer c = new Customer();
         c.setPassword(password);
-        listCustomerCode = (ArrayList<DiscountCode>) dao.codesClients(c);
+        listCustomerCode = (List<DiscountCode>) dao.codesClients(c);
         return listCustomerCode;
     }
 

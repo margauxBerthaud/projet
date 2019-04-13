@@ -159,7 +159,7 @@
                                                         <label>Produit</label>
                                                         <br>
                                                         <select name="produit" class="select-custom selectpicker">
-                                                            <c:forEach var="item" items="${tousLesProduits}">
+                                                            <c:forEach var="item" items="${listeProduits}">
                                                                 <option value="${item}">${item}</option>
                                                             </c:forEach>
                                                         </select>
@@ -204,7 +204,7 @@
                                                 et d'économies" <br>
 
                                             </p>
-                                            <c:forEach var="item" items="${DISCOUNT_CODE}">
+                                            <c:forEach var="item" items="${code}">
                                                 <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.DiscountCode}"</p>
                                                 <p class="description text-center"> Il vous donne accès à  : ${item.taux}% de réduction sur votre commande</p>
                                             </c:forEach>
@@ -244,7 +244,7 @@
                                             
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="comm" items="${commandes}">
+                                                <c:forEach var="comm" items="${commande}">
                                                     <tr>
                                                 <form method='POST' action="CustomerController">
                                                     <td >

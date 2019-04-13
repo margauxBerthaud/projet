@@ -79,7 +79,7 @@ public class LoginController extends HttpServlet {
             try {
                 processRequest(request, response);
             } catch (SQLException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
 	}
 
@@ -97,7 +97,7 @@ public class LoginController extends HttpServlet {
             try {
                 processRequest(request, response);
             } catch (SQLException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
             }
 	}
 
@@ -111,7 +111,7 @@ public class LoginController extends HttpServlet {
 	private void checkLogin(HttpServletRequest request) throws SQLException {
                 // Interaction avec la base de données
                 DAO dao = new DAO();
-
+                CustomerController cc = new CustomerController();
 		// Les paramètres transmis dans la requête
 		String loginParam = request.getParameter("loginParam");
 		String passwordParam = request.getParameter("passwordParam");

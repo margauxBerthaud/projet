@@ -5,7 +5,6 @@
  */
 package model;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
-
 
 /**
  *
@@ -71,18 +69,18 @@ public class DAO {
             return discount;
         }
     }
-    
+
     public int deleteDiscountCode(String code) throws SQLException {
         int discount = 0;
         String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
         try (Connection connection = myDataSource.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(sql)) {
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, code);
             discount = stmt.executeUpdate();
         }
         return discount;
     }
-    
+
     public List<DiscountCode> allCodes() throws SQLException {
 
         List<DiscountCode> result = new LinkedList<>();
@@ -102,6 +100,7 @@ public class DAO {
         }
         return result;
     }
+
     /**
      * Fonction permet de calculer le prix d'une commande
      *
@@ -214,9 +213,10 @@ public class DAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String email = rs.getString("EMAIL");
-                int id =rs.getInt("CUSTOMER_ID");
+                int id = rs.getInt("CUSTOMER_ID");
                 String newLine = System.getProperty("line.separator");
-                resultat = " " + email+ "id :  " + id;         }
+                resultat = " " + email + "id :  " + id;
+            }
         }
         return resultat;
     }
@@ -385,8 +385,9 @@ public class DAO {
         }
         return dc;
     }
-public String nameCustomer(int customer_id) throws SQLException{
-    String resultat = "";
+
+    public String nameCustomer(int customer_id) throws SQLException {
+        String resultat = "";
         String sql = "SELECT NAME FROM CUSTOMER WHERE CUSTOMER_ID = ?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -399,7 +400,8 @@ public String nameCustomer(int customer_id) throws SQLException{
         }
 
         return resultat;
-}
+    }
+
     /**
      * Fonction permettant de connaître le chiffre d'affaire en fonction du
      * client
@@ -454,7 +456,8 @@ public String nameCustomer(int customer_id) throws SQLException{
     }
 
     /**
-     * Fonction permettant de connaître le chiffre d'affaire en fonction de l'état
+     * Fonction permettant de connaître le chiffre d'affaire en fonction de
+     * l'état
      *
      * @param dateD
      * @param dateF
@@ -496,18 +499,17 @@ public String nameCustomer(int customer_id) throws SQLException{
                 if (resultat.containsKey(state)) {
                     resultat.put(state, resultat.get(state) + price);
                     System.out.println("nouveau chiffre d'affaire  " + state + " est de " + resultat.get(state));
-                    
+
                 } else {
                     resultat.put(state, price);
                     System.out.println("chiffre d'affaire = " + state + " est de " + price);
-                    
+
                 }
 
             }
         }
         return resultat;
     }
-    
 
     /**
      * Fonction permettant de connaître le chiffre d'affaire en fonction de la
@@ -586,7 +588,7 @@ public String nameCustomer(int customer_id) throws SQLException{
         double solde = this.montantDisponible(customer_id);
         if (solde >= prixCommande(quantity, product_id, customer_id)) {
             resultat = true;
-            System.out.println("Voila le prix "+ prixCommande(quantity,product_id,customer_id));
+            System.out.println("Voila le prix " + prixCommande(quantity, product_id, customer_id));
         }
         return resultat;
     }
@@ -705,7 +707,7 @@ public String nameCustomer(int customer_id) throws SQLException{
         boolean resultat = false;
         int ancienneQuantite = this.ancienneQuantite(order_num);
         if (ancienneQuantite >= ancienneQuantite(order_num)) {
-            this.virement(this.clientParNumCommande(order_num), this.prixCommande(ancienneQuantite - quantity,this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
+            this.virement(this.clientParNumCommande(order_num), this.prixCommande(ancienneQuantite - quantity, this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
             String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
             try (Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -713,15 +715,13 @@ public String nameCustomer(int customer_id) throws SQLException{
                 stmt.setInt(2, order_num);
                 int result = stmt.executeUpdate();
                 resultat = true;
-                    
-                }
 
             }
 
-         else {
+        } else {
             int difference = quantity - ancienneQuantite;
             if (this.verifierSolde(customer_id, this.produitParNumCommande(order_num), difference)) {
-                this.miseAJourSolde(customer_id, prixCommande(difference, produitParNumCommande(order_num),customer_id));
+                this.miseAJourSolde(customer_id, prixCommande(difference, produitParNumCommande(order_num), customer_id));
                 String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
                 try (Connection connection = myDataSource.getConnection();
                         PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -754,7 +754,7 @@ public String nameCustomer(int customer_id) throws SQLException{
 
     public int supprimerCommande(int order_num) throws SQLException {
         int resultat = 0;
-        this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.quantiteProduit(order_num),this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
+        this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.quantiteProduit(order_num), this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
         String sql = "DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -763,12 +763,13 @@ public String nameCustomer(int customer_id) throws SQLException{
         }
         return resultat;
     }
+
     /**
-     * 
+     *
      * @param deb date de début d'analyse
-     * @param fin date de fin d'analyse 
+     * @param fin date de fin d'analyse
      * @return le chiffre d'affaires représenté par état
-     * @throws SQLException 
+     * @throws SQLException
      */
     public Map<String, Double> chiffreAffaireParEtat(String deb, String fin) throws SQLException {
         Map<String, Double> ret = new HashMap<>();
@@ -817,7 +818,7 @@ public String nameCustomer(int customer_id) throws SQLException{
 
         return ret;
     }
-    
+
     public Map<String, Double> chiffreAffaireByProduct(String DEB, String FIN) throws SQLException {
         Map<String, Double> res = new HashMap<>();
         String sql = "SELECT PRODUCT_ID, SUM(QUANTITY) AS SALES FROM PURCHASE_ORDER"
@@ -858,8 +859,8 @@ public String nameCustomer(int customer_id) throws SQLException{
 
         return res;
     }
-        
-        public Map<String, Double> chiffreAffaireByZip(String deb, String fin) throws SQLException {
+
+    public Map<String, Double> chiffreAffaireByZip(String deb, String fin) throws SQLException {
         Map<String, Double> ret = new HashMap<>();
         String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, ZIP FROM PURCHASE_ORDER"
                 + " INNER JOIN CUSTOMER"
@@ -905,6 +906,30 @@ public String nameCustomer(int customer_id) throws SQLException{
         }
 
         return ret;
-    
-}}
+    }
 
+    public ArrayList<Product> listProduct() throws SQLException {
+
+        ArrayList<Product> result = new ArrayList<>();
+
+        String sql = "SELECT * FROM PRODUCT WHERE QUANTITY_ON_HAND > 0";
+
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("PRODUCT_ID");
+                String des = rs.getString("DESCRIPTION");
+                double price = rs.getDouble("PURCHASE_COST");
+                Product c = new Product(id);
+                c.setDESCRIPTION(des);
+                c.setPURCHASE_COST(price);
+                result.add(c);
+
+            }
+        }
+        return result;
+    }
+
+}
