@@ -11,44 +11,19 @@ package model;
  * @author hbroucke
  */
 public class Customer {
-    public int CUSTOMER_ID;
-    public String DISCOUNT_CODE;
-    public int ZIP;
     public String NAME;
     public String ADDRESSLINE1;
-    public String ADDRESSLINE2;
     public String CITY;
     public String STATE;
     public String PHONE;
-    public String FAX;
     public String EMAIL;
     public int CREDIT_LIMIT;
     public String PASSWORD;
     
-    public int getCUSTOMER_ID() {
-        return CUSTOMER_ID;
+    public Customer(){
+        
     }
-
-    public void setCUSTOMER_ID(int CUSTOMER_ID) {
-        this.CUSTOMER_ID = CUSTOMER_ID;
-    }
-
-    public String getDISCOUNT_CODE() {
-        return DISCOUNT_CODE;
-    }
-
-    public void setDISCOUNT_CODE(String DISCOUNT_CODE) {
-        this.DISCOUNT_CODE = DISCOUNT_CODE;
-    }
-
-    public int getZIP() {
-        return ZIP;
-    }
-
-    public void setZIP(int ZIP) {
-        this.ZIP = ZIP;
-    }
-
+    
     public String getNAME() {
         return NAME;
     }
@@ -65,14 +40,6 @@ public class Customer {
         this.ADDRESSLINE1 = ADDRESSLINE1;
     }
     
-
-    public String getADDRESSLINE2() {
-        return ADDRESSLINE2;
-    }
-
-    public void setADDRESSLINE2(String ADDRESSLINE2) {
-        this.ADDRESSLINE2 = ADDRESSLINE2;
-    }
 
     public String getCITY() {
         return CITY;
@@ -97,14 +64,6 @@ public class Customer {
         this.PHONE = PHONE;
     }
 
-    public String getFAX() {
-        return FAX;
-    }
-
-    public void setFAX(String FAX) {
-        this.FAX = FAX;
-    }
-    
 
     public String getEMAIL() {
         return EMAIL;

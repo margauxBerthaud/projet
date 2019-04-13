@@ -6,6 +6,8 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,41 +29,47 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
-    , @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId")
-    , @NamedQuery(name = "Product.findByPurchaseCost", query = "SELECT p FROM Product p WHERE p.purchaseCost = :purchaseCost")
-    , @NamedQuery(name = "Product.findByQuantityOnHand", query = "SELECT p FROM Product p WHERE p.quantityOnHand = :quantityOnHand")
-    , @NamedQuery(name = "Product.findByMarkup", query = "SELECT p FROM Product p WHERE p.markup = :markup")
-    , @NamedQuery(name = "Product.findByAvailable", query = "SELECT p FROM Product p WHERE p.available = :available")
-    , @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.description = :description")})
+    , @NamedQuery(name = "Product.findByPRODUCT_ID", query = "SELECT p FROM Product p WHERE p.PRODUCT_ID = :PRODUCT_ID")
+    , @NamedQuery(name = "Product.findByPurchaseCost", query = "SELECT p FROM Product p WHERE p.PURCHASE_COST = :PURCHASE_COST")
+    , @NamedQuery(name = "Product.findByQuantityOnHand", query = "SELECT p FROM Product p WHERE p.QUANTITY_ON_HAND = :QUANTITY_ON_HAND")
+    , @NamedQuery(name = "Product.findByMarkup", query = "SELECT p FROM Product p WHERE p.MARKUP = :MARKUP")
+    , @NamedQuery(name = "Product.findByAvailable", query = "SELECT p FROM Product p WHERE p.AVAILABLE = :AVAILABLE")
+    , @NamedQuery(name = "Product.findByDescription", query = "SELECT p FROM Product p WHERE p.DESCRIPTION = :DESCRIPTION")})
 
 
 public class Product implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     @Id
+    @Basic(optional = false)
     @Column(name = "PRODUCT_ID")
-    public Integer PRODUCT_ID;
+    private Integer PRODUCT_ID;
     @Column(name = "PURCHASE_COST")
-    public int MANUFACTURER_ID;
+    private double PURCHASE_COST;
     @Column(name = "QUANTITY_ON_HAND")
-    public String PRODUCT_CODE;
+    private Integer QUANTITY_ON_HAND;
     @Column(name = "MARKUP")
-    public float PURCHASE_COST;
+    private BigDecimal MARKUP;
     @Size(max = 5)
     @Column(name = "AVAILABLE")
-    public String QUANTITY_ON_HAND;
+    private String AVAILABLE;
+    @Size(max = 50)
+    @Column(name = "DESCRIPTION")
+    private String DESCRIPTION;
     @JoinColumn(name = "MANUFACTURER_ID", referencedColumnName = "MANUFACTURER_ID")
     @ManyToOne(optional = false)
-    public float MARKUP;
-    @JoinColumn(name = "MANUFACTURER_ID", referencedColumnName = "MANUFACTURER_ID")
-    @ManyToOne(optional = false)
-    public Boolean AVAILABLE;
+    private Manufacturer MANUFACTURER_ID;
     @JoinColumn(name = "PRODUCT_CODE", referencedColumnName = "PROD_CODE")
     @ManyToOne(optional = false)
-    public String DESCRIPTION;
+    private ProductCode PRODUCT_CODE;
     
-    public Product(Integer PRODUCT_ID, int MANUFACTURER_ID, String PRODUCT_CODE) {
+   
+    
+    public Product(){
+    }
+    
+    public Product (Integer PRODUCT_ID){
         this.PRODUCT_ID = PRODUCT_ID;
-        this.MANUFACTURER_ID = MANUFACTURER_ID;
-        this.PRODUCT_CODE = PRODUCT_CODE;
     }
 
     public int getPRODUCT_ID() {
@@ -71,51 +80,51 @@ public class Product implements Serializable {
         this.PRODUCT_ID = PRODUCT_ID;
     }
 
-    public double getMANUFACTURER_ID() {
+    public Manufacturer getMANUFACTURER_ID() {
         return MANUFACTURER_ID;
     }
 
-    public void setMANUFACTURER_ID(int MANUFACTURER_ID) {
+    public void setMANUFACTURER_ID(Manufacturer MANUFACTURER_ID) {
         this.MANUFACTURER_ID = MANUFACTURER_ID;
     }
 
-    public String getPRODUCT_CODE() {
+    public ProductCode getPRODUCT_CODE() {
         return PRODUCT_CODE;
     }
 
-    public void setPRODUCT_CODE(String PRODUCT_CODE) {
+    public void setPRODUCT_CODE(ProductCode PRODUCT_CODE) {
         this.PRODUCT_CODE = PRODUCT_CODE;
     }
 
-    public float getPURCHASE_COST() {
+    public double getPURCHASE_COST() {
         return PURCHASE_COST;
     }
 
-    public void setPURCHASE_COST(float PURCHASE_COST) {
+    public void setPURCHASE_COST(double PURCHASE_COST) {
         this.PURCHASE_COST = PURCHASE_COST;
     }
 
-    public String getQUANTITY_ON_HAND() {
+    public Integer getQUANTITY_ON_HAND() {
         return QUANTITY_ON_HAND;
     }
 
-    public void setQUANTITY_ON_HAND(String QUANTITY_ON_HAND) {
+    public void setQUANTITY_ON_HAND(Integer QUANTITY_ON_HAND) {
         this.QUANTITY_ON_HAND = QUANTITY_ON_HAND;
     }
 
-    public float getMARKUP() {
+    public BigDecimal getMARKUP() {
         return MARKUP;
     }
 
-    public void setMARKUP(float MARKUP) {
+    public void setMARKUP(BigDecimal MARKUP) {
         this.MARKUP = MARKUP;
     }
 
-    public Boolean getAVAILABLE() {
+    public String getAVAILABLE() {
         return AVAILABLE;
     }
 
-    public void setAVAILABLE(Boolean AVAILABLE) {
+    public void setAVAILABLE(String AVAILABLE) {
         this.AVAILABLE = AVAILABLE;
     }
 

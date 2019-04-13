@@ -15,19 +15,24 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author hbroucke
  */
 public class Manufacturer implements Serializable {
-
-    public Integer MANUFACTURER_ID;
-    public String NAME;
-    public String ADDRESSLINE1;
-    public String ADDRESSLINE2;
-    public String CITY;
-    public String STATE;
-    public int ZIP;
-    public String PHONE;
-    public String FAX;
-    public String EMAIL;
-    public String REP;
-    public Collection<Product> PRODUCT_COLLECTION;
+    
+    private static final long serialVersionUID = 1L;
+    private Integer MANUFACTURER_ID;
+    private String NAME;
+    private String ADDRESSLINE1;
+    private String ADDRESSLINE2;
+    private String CITY;
+    private String STATE;
+    private String ZIP;
+    private String PHONE;
+    private String FAX;
+    private String EMAIL;
+    private String REP;
+    private Collection<Product> PRODUCT_COLLECTION;
+    
+    public Manufacturer (){
+        
+    }
     
     public Manufacturer(Integer MANUFACTURER_ID){
         this.MANUFACTURER_ID = MANUFACTURER_ID;
@@ -82,11 +87,11 @@ public class Manufacturer implements Serializable {
         this.STATE = STATE;
     }
     
-    public int getZIP() {
+    public String getZIP() {
     return ZIP;
     }
 
-    public void setZIP(int ZIP) {
+    public void setZIP(String ZIP) {
         this.ZIP = ZIP;
     }
     

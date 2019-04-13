@@ -12,15 +12,15 @@ import java.util.Date;
  * @author hbroucke
  */
 public class PurchaseOrder {
-    public int ORDER_NUM;
-    public int CUSTOMER_ID;
-    public int PRODUCT_ID;
-    public int QUANTITY;
-    public double SHIPPING_COST;
-    public Date SALES_DATE;
-    public Date SHIPPING_DATE;
-    public String FREIGHT_COMPANY;
-    public double COST;
+    private int ORDER_NUM;
+    private int CUSTOMER_ID;
+    private int PRODUCT_ID;
+    private int QUANTITY;
+    private double SHIPPING_COST;
+    private String DESCRIPTION;
+    private Date SHIPPING_DATE;
+    private String FREIGHT_COMPANY;
+    private double COST;
 
     PurchaseOrder(int numComm, int numClient, int quantite) {
         this.ORDER_NUM=numComm;
@@ -68,15 +68,6 @@ public class PurchaseOrder {
         this.SHIPPING_COST = SHIPPING_COST;
     }
     
-    
-    public Date getSALES_DATE() {
-        return SALES_DATE;
-    }
-
-    public void setSALES_DATE(Date SALES_DATE) {
-        this.SALES_DATE = SALES_DATE;
-    }
-
     public Date getSHIPPING_DATE() {
         return SHIPPING_DATE;
     }
@@ -100,4 +91,12 @@ public class PurchaseOrder {
     public void setCOST(double COST) {
         this.COST = COST;
     }    
+    
+     public String getDESCRIPTION() {
+        return DESCRIPTION;
+    }
+
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
+    }
 }

@@ -5,15 +5,22 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author hbroucke
  */
-public class MicroMarket {
-    public String ZIP_CODE;
-    public Double RADIUS;
-    public Double AREA_LENGTH;
-    public Double AREA_WIDTH;
+public class MicroMarket implements Serializable {
+    
+    private String ZIP_CODE;
+    private Double RADIUS;
+    private Double AREA_LENGTH;
+    private Double AREA_WIDTH;
+    
+    public MicroMarket() {
+
+    }
     
     public MicroMarket(String ZIP_CODE) {
         this.ZIP_CODE = ZIP_CODE;

@@ -119,7 +119,7 @@ public class DAO {
             ResultSet rs = stmt.executeQuery();
             stmt.setInt(1, id_p);
             while (rs.next()) {
-                resultat = (rs.getDouble("PURCHASE_COST") * quantite) * (100 - valeur_discount_code(id_p) / 100);
+                resultat = (rs.getDouble("PURCHASE_COST") * quantite) * (100 - valeur_discount_code(id_c) / 100);
 
             }
         }

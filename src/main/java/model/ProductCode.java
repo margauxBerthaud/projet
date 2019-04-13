@@ -13,9 +13,11 @@ import java.util.Collection;
  * @author hbroucke
  */
 public class ProductCode implements Serializable {
-    public String PROD_CODE;
-    public String DISCOUNT_CODE;
-    public String DESCRITPION;  
+    
+    private static final long serialVersionUID = 1L;
+    private String PROD_CODE;
+    private Character DISCOUNT_CODE;
+    private String DESCRITPION;  
     
     public Collection<Product> productCollection;
     
@@ -35,11 +37,11 @@ public class ProductCode implements Serializable {
         this.PROD_CODE = PROD_CODE;
     }
 
-    public String getDISCOUNT_CODE() {
+    public Character getDISCOUNT_CODE() {
         return DISCOUNT_CODE;
     }
 
-    public void setDISCOUNT_CODE(String DISCOUNT_CODE) {
+    public void setDISCOUNT_CODE(Character DISCOUNT_CODE) {
         this.DISCOUNT_CODE = DISCOUNT_CODE;
     }
 

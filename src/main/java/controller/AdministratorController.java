@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.DAO;
+import model.Product;
 
 /**
  *
@@ -42,7 +44,7 @@ public class AdministratorController extends HttpServlet {
         HttpSession session = request.getSession();
         DAO dao = new DAO();
         
-        List<String> prod = dao.tousLesProduits();
+        ArrayList<String> prod = dao.tousLesProduits();
         request.setAttribute("Listeproduits", prod);
         
         // pour le CA par produit
