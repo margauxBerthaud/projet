@@ -117,6 +117,7 @@ public class DAO {
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             stmt.setInt(1, id_p);
+            
             while (rs.next()) {
                 resultat = (rs.getDouble("PURCHASE_COST") * quantite) * (100 - valeur_discount_code(id_c) / 100);
 
@@ -135,28 +136,34 @@ public class DAO {
     public List<PurchaseOrder> commandesClient(Customer c) throws SQLException {
         List<PurchaseOrder> resultat = new LinkedList<>();
         int id = Integer.parseInt(c.getPassword());
-        String sql = "SELECT ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY, SHIPPING_DATE, DESCRIPTION FROM PURCHASE_ORDER"
-                + " INNER JOIN CUSTOMER"
-                + " USING(CUSTOMER_ID)"
-                + " INNER JOIN PRODUCT"
-                + " USING (PRODUCT_ID)"
-                + " WHERE CUSTOMER_ID = ? ";
+        String sql = "SELECT PURCHASE_ORDER.ORDER_NUM,PURCHASE_ORDER.CUSTOMER_ID,PURCHASE_ORDER.PRODUCT_ID,PURCHASE_ORDER.QUANTITY,\n" +
+"PURCHASE_ORDER.SHIPPING_COST,PURCHASE_ORDER.SALES_DATE,PURCHASE_ORDER.SHIPPING_DATE,PURCHASE_ORDER.FREIGHT_COMPANY,\n" +
+"((PURCHASE_ORDER.QUANTITY * PRODUCT.PURCHASE_COST ) - ((PURCHASE_ORDER.QUANTITY * PRODUCT.PURCHASE_COST )*RATE)/100)\n" +
+"as \"COST\"\n" +
+"FROM PURCHASE_ORDER \n" +
+"INNER JOIN PRODUCT USING(PRODUCT_ID)\n" +
+"INNER JOIN PRODUCT_CODE ON (PRODUCT_CODE = PROD_CODE)\n" +
+"INNER JOIN DISCOUNT_CODE USING (DISCOUNT_CODE)\n" +
+"WHERE CUSTOMER_ID = ?";
+        
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+              
                 int numComm = rs.getInt("ORDER_NUM");
                 int numClient = rs.getInt("CUSTOMER_ID");
                 int numProduit = rs.getInt("PRODUCT_ID");
                 int quantite = rs.getInt("QUANTITY");
-                double remise = prixCommande(quantite, numClient, numProduit);
+                float cost = rs.getFloat("COST");
+                //double remise = prixCommande(quantite, numClient, numProduit);
                 Date date = rs.getDate("SHIPPING_DATE");
-                String description = rs.getString("DESCRIPTION");
+                //String description = rs.getString("DESCRIPTION");
                 PurchaseOrder commande = new PurchaseOrder(numComm, numClient, quantite);
-                System.out.println("le prix est : " + remise);
+                //System.out.println("le prix est : " + remise);
                 commande.setSHIPPING_DATE(date);
-                commande.setSHIPPING_COST(remise);
+                commande.setSHIPPING_COST(cost);
                 resultat.add(commande);
 
             }
@@ -617,9 +624,9 @@ public class DAO {
                 resultat.add(id);
             }
         }
-        int numAlea = (int) (Math.random() * 10000);
+        int numAlea = (int) (Math.random() * 20000);
         while (resultat.contains(numAlea)) {
-            numAlea = (int) (Math.random() * 10000);
+            numAlea = (int) (Math.random() * 20000);
         }
         return numAlea;
     }
@@ -627,26 +634,31 @@ public class DAO {
     public int ajouterCommande(int customer_id, int quantity, int product_id) throws SQLException {
         int resultat = 0;
         String sql = "INSERT INTO PURCHASE_ORDER (ORDER_NUM, CUSTOMER_ID, PRODUCT_ID, QUANTITY,SHIPPING_DATE) VALUES (?,?,?,?,?)";
-        if (verifierSolde(customer_id, product_id, quantity) == true) {
-            this.miseAJourSolde(customer_id, prixCommande(quantity, product_id, customer_id));
+    
+       // if (verifierSolde(customer_id, product_id, quantity) == true) {
+       //     this.miseAJourSolde(customer_id, prixCommande(quantity, product_id, customer_id));
             try (Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+                
                 stmt.setInt(1, numeroCommande());
                 stmt.setInt(2, customer_id);
                 stmt.setInt(3, product_id);
                 stmt.setInt(4, quantity);
-
                 stmt.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
+                
+                System.out.println("Test num"+numeroCommande()+"  idUser "+customer_id+" prod "+product_id+" qte "+quantity+"  date"+java.sql.Date.valueOf(java.time.LocalDate.now()) );
                 resultat = stmt.executeUpdate();
             }
-        } else {
-            throw new SQLException("Vous n'avez pas assez d'argent disponible");
+            
+      //  } else {
+       //     throw new SQLException("Vous n'avez pas assez d'argent disponible");
 
-        }
+      //  }
         return resultat;
 
     }
-
+    
+    
     public int ancienneQuantite(int order_num) throws SQLException {
         int resultat = 0;
         String sql = "SELECT QUANTITY FROM PURCHASE_ORDER WHERE ORDER_NUM = ?";
@@ -707,7 +719,7 @@ public class DAO {
         boolean resultat = false;
         int ancienneQuantite = this.ancienneQuantite(order_num);
         if (ancienneQuantite >= ancienneQuantite(order_num)) {
-            this.virement(this.clientParNumCommande(order_num), this.prixCommande(ancienneQuantite - quantity, this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
+            //this.virement(this.clientParNumCommande(order_num), this.prixCommande(ancienneQuantite - quantity, this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
             String sql = "UPDATE PURCHASE_ORDER SET QUANTITY=? WHERE ORDER_NUM=?";
             try (Connection connection = myDataSource.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -754,7 +766,7 @@ public class DAO {
 
     public int supprimerCommande(int order_num) throws SQLException {
         int resultat = 0;
-        this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.quantiteProduit(order_num), this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
+        //this.virement(this.clientParNumCommande(order_num), this.prixCommande(this.quantiteProduit(order_num), this.produitParNumCommande(order_num), this.clientParNumCommande(order_num)));
         String sql = "DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {

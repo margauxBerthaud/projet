@@ -123,7 +123,7 @@
                                                 <div class="form-group">
                                                     <label>Solde de votre compte : </label>
                                                     <fmt:setLocale value = "en_US"/>
-                                                    
+
                                                     <input type="text" class="form-control" disabled placeholder="Company" value="<fmt:formatNumber value = "${solde}" type = "currency"/>">
                                                 </div>
                                             </div>
@@ -168,7 +168,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Quantité</label>
-                                                        <input type="text" class="form-control" placeholder="Quantite" value="" name="quantite">
+                                                        <input type="number" class="form-control" placeholder="Quantite" value="" name="quantite">
                                                         <input type="hidden" name="action" value="ADD_COMMANDE">
                                                     </div>
                                                 </div>
@@ -241,7 +241,7 @@
                                             <th>Type de produit</th>
                                             <th>Date</th>
                                             <th>Effacer</th>
-                                            
+
                                             </thead>
                                             <tbody>
                                                 <c:forEach var="comm" items="${commande}">
@@ -258,34 +258,33 @@
                                                         <input name="quantityToEdit" id="${comm.QUANTITY}" type="text" class="validate" value ="${comm.QUANTITY}">
                                                         <input type="hidden" name="action" value="EDIT_COMMANDE">
                                                     </td>
-                                                    
-                                                     <td>
+
+                                                    <td>
                                                         <button type="submit" class="btn btn-info btn-fill pull-left">Edit <i class="fa fa-pencil"></i></button>
 
                                                     </td>
                                                 </form>
-                                                    <td >
-                                                        <fmt:setLocale value = "en_US"/>
-                                                        <fmt:formatNumber value = "${comm.SHIPPING_COST}" type = "currency"/>
-                                                        
-                                                    </td>
-                                                    <td >
-                                                        ${comm.DESCRIPTION}
-                                                    </td>
-                                                    <td >
-                                                        ${comm.SHIPPING_DATE}
-                                                    </td>
-                                                    <form method='POST' action="CustomerController">
+                                                <td >
+                                                    <fmt:setLocale value = "en_US"/>
+                                                    <fmt:formatNumber value = "${comm.SHIPPING_COST}" type = "currency"/>
+
+                                                </td>
+                                                <td >
+                                                   
+                                                </td>
+                                                <td >
+                                                    ${comm.SHIPPING_DATE}
+                                                </td>
+                                                <form method='POST' action="CustomerController">
                                                     <td>
                                                         <input hidden name="purchaseToDelete" id="${comm.ORDER_NUM}" type="text" class="validate" value="${comm.ORDER_NUM}">
                                                         <input type="hidden" name="action" value="DELETE_COMMANDE">
                                                         <button type="submit" class="btn btn-info btn-fill pull-left">Delete <i class="fa fa-trash"></i></button>
-                                                           
-                                                        </a>
+
                                                     </td>
-                                                    </form>
-                                                   
-                                             
+                                                </form>
+
+
                                                 </tr>
                                             </c:forEach> 
                                             </tbody>
@@ -299,20 +298,20 @@
 
                     </div>
                 </div>
-                                                
-                                                 <footer class="footer">
-            <div class="container-fluid">
 
-                <p class="copyright pull-right">
-                    &copy;<a href="#">Promotion 2020</a>, made with <i data-v-a2425572="" class="fa fa-heart" style="color: rgb(233, 30, 99);"></i> by Sophie Peltier, Gabrielle Aussel & Anthony Dagneaux
-                </p>
-            </div>
-        </footer>
+                <footer class="footer">
+                    <div class="container-fluid">
+
+                        <p class="copyright pull-right">
+                            &copy;<a href="#">Promotion 2020</a>, made with <i data-v-a2425572="" class="fa fa-heart" style="color: rgb(233, 30, 99);"></i> by Sophie Peltier, Gabrielle Aussel & Anthony Dagneaux
+                        </p>
+                    </div>
+                </footer>
             </div>
 
         </div>
 
-       
+
 
     </body>
 

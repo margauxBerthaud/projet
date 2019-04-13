@@ -42,14 +42,15 @@ public class CustomerController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        response.setContentType("text/html;charset=UTF-8");
         //Ouvrir une session appelle cette servlet
         HttpSession session = request.getSession();
         DAO dao = new DAO();
+        //int qte = Integer.parseInt(request.getParameter("qte"));
         String action = request.getParameter("action");
         action = (action == null)? "" : action;
-
         //Ajouter commandes
-        String quantite = request.getParameter("quantite");
+        
         ArrayList<String> list = (ArrayList<String>) dao.tousLesProduits();
         request.setAttribute("listeProduits", list);
         
@@ -64,7 +65,7 @@ public class CustomerController extends HttpServlet {
         //Information sur le client connecté
         Double solde = dao.montantDisponible(Integer.parseInt(password));
         session.setAttribute("solde", solde);
-        
+        System.out.println("action  "+action);
         request.setAttribute("codes", voirCodesClient(request));
         try {
             Customer c = new Customer();
@@ -72,9 +73,13 @@ public class CustomerController extends HttpServlet {
             session.setAttribute("codes", voirCodesClient(request));
             switch (action) {
                 
-                case "ADD_ORDER":
+                case "ADD_COMMANDE":
+                    String quantite = request.getParameter("quantite");
+                    System.out.println("Test id: "+Integer.parseInt(password)+"  qte "+quantite+"    prod "+dao.numProduit(request.getParameter("produit")));
                     dao.ajouterCommande(Integer.parseInt(password), Integer.parseInt(quantite), dao.numProduit(request.getParameter("produit")));
                     session.setAttribute("commande", dao.commandesClient(c));
+
+                    System.out.println("Test action: "+action+"  qte "+quantite);
                     solde = dao.montantDisponible(Integer.parseInt(password));
                     session.setAttribute("solde", solde);
                     request.setAttribute("message", "Vous avez commandez " + quantite + " " + request.getParameter("produit") + ".");
@@ -82,7 +87,7 @@ public class CustomerController extends HttpServlet {
                     break;
                     
                     
-                case "EDIT_ORDER":
+                case "EDIT_COMMANDE":
                     try {
                         String quantityToEdit = request.getParameter("quantityToEdit");
                         dao.editerCommande(Integer.parseInt(purchaseToEdit), Integer.parseInt(quantityToEdit), Integer.parseInt(password));
@@ -102,12 +107,14 @@ public class CustomerController extends HttpServlet {
                     break;
                     
                     
-                case "DELETE_ORDER":
+                case "DELETE_COMMANDE":
                     try {
+                        System.out.println("hooooooooooo "+purchaseToDelete);
                         dao.supprimerCommande(Integer.parseInt(purchaseToDelete));
                         session.setAttribute("commande", dao.commandesClient(c));
                         request.setAttribute("message", "Commande " + purchaseToDelete + " Supprimée");
                         request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
+                        
                     } catch (SQLIntegrityConstraintViolationException e) {
                         request.setAttribute("message2", "Impossible de supprimer " + purchaseToDelete + ", cette commande.");
                     }
@@ -127,6 +134,7 @@ public class CustomerController extends HttpServlet {
                     break;
                     
                 case "SHOW_PRODUIT":
+                    System.out.println("action  "+action);
                     ArrayList<Product> listeProduit = dao.listProduct();
                     session.setAttribute("listeProduit", listeProduit);
                     request.getRequestDispatcher("WEB-INF/produits.jsp").forward(request, response);

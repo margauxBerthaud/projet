@@ -158,8 +158,8 @@
                                                         <label>Produit</label>
                                                         <br>
                                                         <select name="produit" class="select-custom selectpicker">
-                                                            <c:forEach var="item" items="${tousLesProduits}">
-                                                                <option value="${item}">${item}</option>
+                                                            <c:forEach var="item" items="${listeProduit}">
+                                                                <option value="${item.DESCRIPTION}">${item.DESCRIPTION}</option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
@@ -242,7 +242,7 @@
 
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="p" items="${tousLesProduits}">
+                                                <c:forEach var="p" items="${listeProduit}">
                                                     <tr>
 
                                                         <td >

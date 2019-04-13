@@ -39,6 +39,7 @@ public class AdministratorController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ParseException {
+        response.setContentType("text/html;charset=UTF-8");
         // Trouver l'évenemment qui appelle cette servlet
         String action = request.getParameter("action"); 
         HttpSession session = request.getSession();

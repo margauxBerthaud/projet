@@ -31,10 +31,13 @@ public class LoginController extends HttpServlet {
 		throws ServletException, IOException, SQLException {
 		// Quelle action a appelé cette servlet ?
 		String action = request.getParameter("action");
+                response.setContentType("text/html;charset=UTF-8");
 		if (null != action) {
 			switch (action) {
 				case "login":
+                                     System.out.println("login");
 					checkLogin(request);
+                                       
 					break;
 				case "Logout":
 					doLogout(request);
@@ -125,6 +128,7 @@ public class LoginController extends HttpServlet {
 		} 
                 else if(!"".equals(loginParam) && !"".equals(passwordParam)){
                    Customer c = dao.connexionClient(loginParam);
+                  
                 // On récupère les propriétés du client 
                    String login = c.getEMAIL();
                    String password = c.getPassword();
@@ -141,7 +145,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("userPassword", password);
                         session.setAttribute("userAddress", address);
                         session.setAttribute("userPhone", phone);
-                        session.setAttribute("commandes", dao.commandesClient(c));  
+                        session.setAttribute("commande", dao.commandesClient(c));  
                         ArrayList<String> des = dao.tousLesProduits();
                         request.setAttribute("listeProduits", des);
                         Double solde = dao.montantDisponible(Integer.parseInt(password));
