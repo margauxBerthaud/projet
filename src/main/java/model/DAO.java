@@ -703,7 +703,7 @@ public class DAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String state = rs.getString("STATE");
-                double price = rs.getDouble("QUANTITY") * montantDisponible(rs.getInt("PRODUCT_ID"));
+                double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (ret.containsKey(state)) {
                     ret.put(state, ret.get(state) + price);
                     System.out.println("nouveau ca  " + state + " est de " + ret.get(state));

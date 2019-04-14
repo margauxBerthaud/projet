@@ -94,12 +94,12 @@ public class AdministratorController extends HttpServlet {
                     break;
                 case "caByCli":
                     session.setAttribute("cliCA", dao.CAParDateEtClient(date_debut_clt, date_fin_clt));
-                    session.setAttribute("dateCli", "valade du " + date_debut_clt + " au " + date_fin_clt);
+                    session.setAttribute("dateCli", "valide du " + date_debut_clt + " au " + date_fin_clt);
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
                 case "caByZip":
                     session.setAttribute("zipCA", dao.chiffreAffaireByZip(date_debut_zip, date_fin_zip));
-                    session.setAttribute("datezip", "valade du " + date_debut_zip + " au " + date_fin_zip);
+                    session.setAttribute("datezip", "valide du " + date_debut_zip + " au " + date_fin_zip);
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
             }
