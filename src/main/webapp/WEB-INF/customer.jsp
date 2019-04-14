@@ -190,7 +190,6 @@
                                             <th>Quantité</th>
                                             <th>Modifier</th>
                                             <th>Prix Total</th>
-                                            <th>Type de produit</th>
                                             <th>Date</th>
                                             <th>Effacer</th>
 
@@ -220,9 +219,6 @@
                                                     <fmt:setLocale value = "en_US"/>
                                                     <fmt:formatNumber value = "${comm.SHIPPING_COST}" type = "currency"/>
 
-                                                </td>
-                                                <td >
-                                                   
                                                 </td>
                                                 <td >
                                                     ${comm.SHIPPING_DATE}

@@ -47,11 +47,7 @@ public class AdministratorController extends HttpServlet {
         
         ArrayList<String> prod = dao.tousLesProduits();
         request.setAttribute("Listeproduits", prod);
-        
-        // pour le CA par produit
-        String date_debut_prod = request.getParameter("date_debut_prod");
-        String date_fin_prod = request.getParameter("date_fin_prod");
-        
+
         // CA par Client
         String date_debut_clt= request.getParameter("date_debut_clt");
         String date_fin_clt = request.getParameter("date_fin_clt");
@@ -63,10 +59,7 @@ public class AdministratorController extends HttpServlet {
         //Ca par zone géographique
         String date_debut_geo= request.getParameter("date_debut_geo");
         String date_fin_geo = request.getParameter("date_fin_geo");
-        
-        //CA par ZIP 
-        String date_debut_zip= request.getParameter("date_debut_zip");
-        String date_fin_zip = request.getParameter("date_fin_zip");
+
         
         if (null != action){
             switch (action){
@@ -76,30 +69,19 @@ public class AdministratorController extends HttpServlet {
                     break;
                 case "caByProductCode":
                     session.setAttribute("productCodeCA", dao.CAparDateEtCategorieProduit(date_debut_ctg, date_fin_ctg));
-                    session.setAttribute("dateProductCode", "valable du " + date_debut_ctg+ " au " + date_fin_ctg);
+                    session.setAttribute("dateProductCode", "pour la période du " + date_debut_ctg+ " au " + date_fin_ctg);
                     
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
-                    break;
-                case "caByProduct":
-                    session.setAttribute("productCA", dao.chiffreAffaireByProduct(date_debut_prod, date_fin_prod));
-                    session.setAttribute("dateProduct", "du " + date_debut_prod + " au " + date_fin_prod);
-
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
                 case "caByGeo":
                     session.setAttribute("geoCA", dao.chiffreAffaireParEtat(date_debut_geo, date_fin_geo));
-                    session.setAttribute("dateGeo", "du " + date_debut_geo + " au " + date_fin_geo);
+                    session.setAttribute("dateGeo", "pour la période du " + date_debut_geo + " au " + date_fin_geo);
 
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
                 case "caByCli":
                     session.setAttribute("cliCA", dao.CAParDateEtClient(date_debut_clt, date_fin_clt));
-                    session.setAttribute("dateCli", "valide du " + date_debut_clt + " au " + date_fin_clt);
-                    request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
-                    break;
-                case "caByZip":
-                    session.setAttribute("zipCA", dao.chiffreAffaireByZip(date_debut_zip, date_fin_zip));
-                    session.setAttribute("datezip", "valide du " + date_debut_zip + " au " + date_fin_zip);
+                    session.setAttribute("dateCli", "pour la période du " + date_debut_clt + " au " + date_fin_clt);
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
                     break;
             }
@@ -162,11 +144,5 @@ public class AdministratorController extends HttpServlet {
             session.invalidate();
         }
     }
-    
-    private String findUserInSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        return (session == null) ? null : (String) session.getAttribute("userName");
-    }
-    
 
 }

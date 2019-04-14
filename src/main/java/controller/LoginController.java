@@ -120,7 +120,7 @@ public class LoginController extends HttpServlet {
 		String passwordParam = request.getParameter("passwordParam");
 
                 // Login de l'administrateur
-		if ((loginParam.equals("admin@mail.com") && (passwordParam.equals("pass")))) {
+		if ((loginParam.equals("admin@admin") && (passwordParam.equals("admin")))) {
 			// On a trouvé la combinaison login / password
 			// On stocke l'information dans la session
 			HttpSession session = request.getSession(true); // démarre la session
@@ -150,7 +150,6 @@ public class LoginController extends HttpServlet {
                         request.setAttribute("listeProduits", des);
                         Double solde = dao.montantDisponible(Integer.parseInt(password));
                         session.setAttribute("solde", solde);
-                        session.setAttribute("codes", viewCodes(request));
                     } 
                     else if (login.equals("nodata")){
                         request.setAttribute("errorMessage", "Login/Password incorrect");
@@ -189,16 +188,4 @@ public class LoginController extends HttpServlet {
             return result;
          }
          
-        public List<DiscountCode> viewCodes(HttpServletRequest request) throws SQLException {
-            List<DiscountCode> result = new LinkedList<>();
-            DAO dao= new DAO();
-            HttpSession session = request.getSession();
-            String password = ((String)session.getAttribute("userPassword"));
-            Customer c = new Customer();
-            c.setPassword(password);
-            result = dao.codesClients(c);         
-            
-            return result;
-    }
-
 }

@@ -37,70 +37,6 @@ public class DAO {
         this.myDataSource = DataSourceFactory.getDataSource();
     }
 
-    public int faireVirement(int id, double montant) throws SQLException {
-        int resultat = 0;
-        String sql = "UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
-        try (
-                Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, (int) (this.montantDisponible(id) + montant));
-            stmt.setInt(2, id);
-            resultat = stmt.executeUpdate();
-        }
-        return resultat;
-
-    }
-
-    /**
-     * Fonction permettant de récupérer la valeur du taux de remise en passant
-     * en paramètre le client
-     */
-    public double valeur_discount_code(int customerID) throws SQLException {
-        double discount = 0;
-        String sql = "SELECT DISCOUNT_CODE.RATE FROM DISCOUNT_CODE INNER JOIN CUSTOMER ON DISCOUNT_CODE.DISCOUNT_CODE=CUSTOMER.DISCOUNT_CODE WHERE CUSTOMER_ID=?";
-        try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, customerID);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                double taux = rs.getByte("RATE");
-                discount = taux;
-            }
-            return discount;
-        }
-    }
-
-    public int deleteDiscountCode(String code) throws SQLException {
-        int discount = 0;
-        String sql = "DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE = ?";
-        try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, code);
-            discount = stmt.executeUpdate();
-        }
-        return discount;
-    }
-
-    public List<DiscountCode> allCodes() throws SQLException {
-
-        List<DiscountCode> result = new LinkedList<>();
-
-        String sql = "SELECT * FROM DISCOUNT_CODE ORDER BY DISCOUNT_CODE";
-        try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String id = rs.getString("DISCOUNT_CODE");
-                float rate = rs.getFloat("RATE");
-                DiscountCode c = new DiscountCode(id, rate);
-                result.add(c);
-
-            }
-        }
-        return result;
-    }
-
     /**
      * Fonction permet de calculer le prix d'une commande
      *
@@ -119,7 +55,7 @@ public class DAO {
             stmt.setInt(1, id_p);
             
             while (rs.next()) {
-                resultat = (rs.getDouble("PURCHASE_COST") * quantite) * (100 - valeur_discount_code(id_c) / 100);
+                resultat = (rs.getDouble("PURCHASE_COST") * quantite / 100);
 
             }
         }
@@ -365,34 +301,6 @@ public class DAO {
         return c;
     }
 
-    /**
-     * Fonction permettant de connaître tous les codes que possèdent un client
-     *
-     * @return
-     * @throws java.sql.SQLException
-     */
-    public List<DiscountCode> codesClients(Customer c) throws SQLException {
-        List<DiscountCode> dc = new LinkedList<>();
-        int id = Integer.parseInt(c.getPassword());
-        String sql = "SELECT * FROM DISCOUNT_CODE"
-                + " INNER JOIN CUSTOMER"
-                + " ON DISCOUNT_CODE.DISCOUNT_CODE = CUSTOMER.DISCOUNT_CODE"
-                + " WHERE CUSTOMER_ID = ? ";
-        try (
-                Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String discount = rs.getString("DISCOUNT_CODE");
-                float rate = rs.getFloat("RATE");
-                DiscountCode d = new DiscountCode(discount, rate);
-                dc.add(d);
-            }
-        }
-        return dc;
-    }
-
     public String nameCustomer(int customer_id) throws SQLException {
         String resultat = "";
         String sql = "SELECT NAME FROM CUSTOMER WHERE CUSTOMER_ID = ?";
@@ -560,18 +468,6 @@ public class DAO {
         return resultat;
     }
 
-    public int virement(int customer_id, double montant) throws SQLException {
-        int resultat = 0;
-        String sql = "UPDATE CUSTOMER SET CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
-        try (
-                Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, (int) (montantDisponible(customer_id) + montant));
-            stmt.setInt(2, customer_id);
-            resultat = stmt.executeUpdate();
-        }
-        return resultat;
-    }
 
     public int clientParNumCommande(int order_num) throws SQLException {
         int resultat = 0;
@@ -703,95 +599,6 @@ public class DAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String state = rs.getString("STATE");
-                double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                if (ret.containsKey(state)) {
-                    ret.put(state, ret.get(state) + price);
-                    System.out.println("nouveau ca  " + state + " est de " + ret.get(state));
-                } else {
-                    ret.put(state, price);
-                    System.out.println("ca = " + state + " est de " + price);
-                }
-
-            }
-        }
-
-        return ret;
-    }
-
-    public Map<String, Double> chiffreAffaireByProduct(String DEB, String FIN) throws SQLException {
-        Map<String, Double> res = new HashMap<>();
-        String sql = "SELECT PRODUCT_ID, SUM(QUANTITY) AS SALES FROM PURCHASE_ORDER"
-                + " WHERE SHIPPING_DATE BETWEEN ? AND ?"
-                + " GROUP BY PRODUCT_ID";
-        try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsed1 = null;
-            Date parsed2 = null;
-            try {
-                parsed1 = SDF.parse(DEB);
-            } catch (ParseException e1) {
-                // TODO Auto-generated catch block
-
-            }
-            try {
-                parsed2 = SDF.parse(FIN);
-            } catch (ParseException e2) {
-                // TODO Auto-generated catch block
-                e2.printStackTrace();
-            }
-            java.sql.Date data1 = new java.sql.Date(parsed1.getTime());
-            java.sql.Date data2 = new java.sql.Date(parsed2.getTime());
-            System.out.println("Le Chiffre d'affaire est de ------------------------------------------------------------------ " + data1);
-            System.out.println("Le chiffre d'affaire est de ------------------------------------------------------------------ " + data2);
-            stmt.setDate(1, data1);
-            stmt.setDate(2, data2);
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String product = getDescription(rs.getInt("PRODUCT_ID"));
-                double price = rs.getDouble("SALES") * recupererPrix(rs.getInt("PRODUCT_ID"));
-                res.put(product, price);
-                System.out.println("Le Ca est de ------------------------------------------------------------------ " + price);
-            }
-        }
-
-        return res;
-    }
-
-    public Map<String, Double> chiffreAffaireByZip(String deb, String fin) throws SQLException {
-        Map<String, Double> ret = new HashMap<>();
-        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, ZIP FROM PURCHASE_ORDER"
-                + " INNER JOIN CUSTOMER"
-                + " USING (CUSTOMER_ID)"
-                + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
-
-        try (Connection connection = myDataSource.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(sql)) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsed1 = null;
-            Date parsed2 = null;
-            try {
-                parsed1 = sdf.parse(deb);
-            } catch (ParseException e1) {
-                // TODO Auto-generated catch block
-
-            }
-            try {
-                parsed2 = sdf.parse(fin);
-            } catch (ParseException e2) {
-                // TODO Auto-generated catch block
-                e2.printStackTrace();
-            }
-            java.sql.Date data1 = new java.sql.Date(parsed1.getTime());
-            java.sql.Date data2 = new java.sql.Date(parsed2.getTime());
-
-            stmt.setDate(1, data1);
-            stmt.setDate(2, data2);
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String state = rs.getString("ZIP");
                 double price = rs.getDouble("QUANTITY") * recupererPrix(rs.getInt("PRODUCT_ID"));
                 if (ret.containsKey(state)) {
                     ret.put(state, ret.get(state) + price);

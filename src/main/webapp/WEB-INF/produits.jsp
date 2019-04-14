@@ -186,10 +186,10 @@
                                         <table class="table table-hover table-striped">
                                             <thead>
 
-                                            <th>ID Produit</th>
+                                            <th>Identifiant du Produit</th>
                                             <th>Prix </th>
-                                            <th>Type de produit</th>
-                                            <th>Prix avec votre réduction</th>
+                                            <th>Produit</th>
+                                            
 
 
                                             </thead>

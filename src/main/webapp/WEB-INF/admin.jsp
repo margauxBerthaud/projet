@@ -75,12 +75,7 @@
                     </div>
 
                     <ul class="nav">
-                        <li class="active">
-                            <a href="#">
-                                <i class="pe-7s-graph"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
+
                         <li>
                             <form class="logout" action="LoginController" method="POST">
                                 <input class="form-control " type='submit' name='action' value='Logout'>
@@ -111,30 +106,6 @@
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="card">
-
-                                    <div class="header">
-                                        <h4 class="title">Chiffre d'affaire par Produit</h4>                                     
-                                        <form method='POST' action="AdministratorController">
-                                            <input type="date" class="choixdate" name="date_debut_prod">
-                                            <input type="date" class="choixdate" name="date_fin_prod">
-                                            <input type="hidden" name="action" value="caByProduct">
-                                            <input type="submit" value="Envoyer">
-                                        </form>
-                                    </div>
-                                    <div class="content">
-                                        <canvas id="myChart"></canvas>
-
-                                        <div class="footer">
-
-                                            <hr>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="header">
@@ -207,32 +178,6 @@
                                 </div>
                             </div>
 
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card ">
-                                    <div class="header">
-                                        <h4 class="title">Chiffre d'affaire par ZIP (Code postal)</h4>
-                                        
-                                        <form method='POST' action="AdministratorController">
-                                            <input type="date" class="choixdate" name="date_debut_zip">
-                                            <input type="date" class="choixdate" name="date_fin_zip">
-                                            <input type="hidden" name="action" value="caByZip">
-                                            <input type="submit" value="Envoyer">
-                                        </form>
-                                    </div>
-                                    <div class="content">
-                                        <canvas id="chartZip"></canvas>
-
-                                        <div class="footer">
-
-                                            <hr>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

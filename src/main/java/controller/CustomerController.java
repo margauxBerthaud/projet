@@ -66,11 +66,10 @@ public class CustomerController extends HttpServlet {
         Double solde = dao.montantDisponible(Integer.parseInt(password));
         session.setAttribute("solde", solde);
         System.out.println("action  "+action);
-        request.setAttribute("codes", voirCodesClient(request));
+
         try {
             Customer c = new Customer();
             c.setPassword(password);
-            session.setAttribute("codes", voirCodesClient(request));
             switch (action) {
                 
                 case "ADD_COMMANDE":
@@ -117,19 +116,6 @@ public class CustomerController extends HttpServlet {
                         
                     } catch (SQLIntegrityConstraintViolationException e) {
                         request.setAttribute("message2", "Impossible de supprimer " + purchaseToDelete + ", cette commande.");
-                    }
-                    break;
-                    
-                case "DO_VIREMENT":
-                    try {
-                        int montantVerser = Integer.parseInt(request.getParameter("montant"));
-                        dao.virement(Integer.parseInt(password), montantVerser);
-                        solde = dao.montantDisponible(Integer.parseInt(password));
-                        session.setAttribute("solde", solde);
-                        request.setAttribute("message", "Virement de : " + montantVerser + "$ débiter sur votre compte client.");
-                        request.getRequestDispatcher("WEB-INF/customer.jsp").forward(request, response);
-                    } catch (SQLIntegrityConstraintViolationException e) {
-
                     }
                     break;
                     
@@ -185,28 +171,6 @@ public class CustomerController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    	private String trouverUserDansSession(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		return (session == null) ? null : (String) session.getAttribute("userName");
-	}
-        
-        private void supprimerCode(String code) throws SQLException {
-		DAO dao = new DAO();
-                dao.deleteDiscountCode(code);
-		
-	}
-
-    private List<DiscountCode> voirCodesClient(HttpServletRequest request) throws SQLException {
-        List<DiscountCode> listCustomerCode = new LinkedList();
-        DAO dao = new DAO();
-        HttpSession newSession = request.getSession();
-        String password = (String) newSession.getAttribute("userPassword");
-        Customer c = new Customer();
-        c.setPassword(password);
-        listCustomerCode = (List<DiscountCode>) dao.codesClients(c);
-        return listCustomerCode;
     }
 
 }
