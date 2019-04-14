@@ -75,7 +75,7 @@ public class AdministratorController extends HttpServlet {
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     break;
                 case "caByProductCode":
-                    session.setAttribute("productCA", dao.CAparDateEtCategorieProduit(date_debut_ctg, date_fin_ctg));
+                    session.setAttribute("productCodeCA", dao.CAparDateEtCategorieProduit(date_debut_ctg, date_fin_ctg));
                     session.setAttribute("dateProductCode", "valable du " + date_debut_ctg+ " au " + date_fin_ctg);
                     
                     request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
