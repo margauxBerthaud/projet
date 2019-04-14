@@ -12,7 +12,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/png" href="resources/assets/guarantee.png">
+        
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
         <title>Web Market de ${userName}</title>
