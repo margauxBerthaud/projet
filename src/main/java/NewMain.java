@@ -28,11 +28,7 @@ public class NewMain {
         
         DAO dao = new DAO();
         
-        List<DiscountCode> lis = dao.allCodes();
-        
-        for (DiscountCode li : lis) {
-            System.out.println("prod "+li.getDISCOUNT_CODE());
-        }
+
         List<Product> listp = dao.listProduct();
         
         for (Product product : listp) {
