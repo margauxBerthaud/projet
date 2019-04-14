@@ -473,7 +473,7 @@ public class DAO {
      */
     public Map<String, Double> CAParDateEtEtat(String dateD, String dateF) throws SQLException {
         Map<String, Double> resultat = new HashMap<>();
-        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, STATE FROM PURCHASE_ORDER"
+        String sql = "SELECT PRODUCT_ID, CUSTOMER_ID, QUANTITY, CUSTOMER.STATE FROM PURCHASE_ORDER"
                 + " INNER JOIN CUSTOMER"
                 + " USING (CUSTOMER_ID)"
                 + " WHERE SHIPPING_DATE BETWEEN ? AND ?";
@@ -533,7 +533,7 @@ public class DAO {
                 + "                INNER JOIN PURCHASE_ORDER ON CUSTOMER.CUSTOMER_ID=PURCHASE_ORDER.CUSTOMER_ID\n"
                 + "                INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID\n"
                 + "                INNER JOIN  MANUFACTURER ON PRODUCT.MANUFACTURER_ID=MANUFACTURER.MANUFACTURER_ID\n"
-                + "                WHERE SALES_DATE<=? AND SALES_DATE>=?\n"
+                + "                WHERE SHIPPING_DATE<=? AND SHIPPING_DATE>=?\n"
                 + "                GROUP BY CITY";
         try (Connection connection = myDataSource.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
