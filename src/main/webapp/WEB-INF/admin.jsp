@@ -65,9 +65,7 @@
                 <div class="sidebar-wrapper">
                     <div class="logo">
                         <div class="card card-user">
-                            <div class="image">
-                                <img class="banniere" src= "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi4oKmch8jhAhVl1-AKHbuFBAoQjRx6BAgBEAU&url=https%3A%2F%2Fwww.malekal.com%2Fdifference-compte-administrateur-utilisateur%2F&psig=AOvVaw1YARCS5Zm6sAto9tZes7qU&ust=1555070106840816"  alt="..."/>
-                            </div>
+
                         </div>
                         
                        

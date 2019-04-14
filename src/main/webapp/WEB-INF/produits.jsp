@@ -46,7 +46,7 @@
     <body>
 
         <div class="wrapper">
-            <div class="sidebar" data-color="soso"  data-image="assets/img/sidebar-2.jpg">
+            <div class="sidebar" data-color="blue"  data-image="assets/img/sidebar-2.jpg">
 
                 <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
 
@@ -97,7 +97,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">L'équipe espère que vous allez trouver votre bonheur ${userName} !</a>
+                            <a class="navbar-brand" href="#">Nous vous souhaitons la bienvenue chez ${userName} !</a>
                         </div>
                         <div class="collapse navbar-collapse">
 
@@ -185,41 +185,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <div class="card card-user">
-                                    <div class="image">
-                                        <img class="banniere" src="https://media.giphy.com/media/11p7VSL9W2AclW/giphy.gif" alt="..."/>
-                                    </div>
-                                    <div class="content">
-                                        <div class="author">
-                                            <a href="#">
-                                                <img class="avatar border-gray" src="assets/img/faces/jc.jpg" alt="..."/>
-
-                                                <h4 class="title">${userName}<br />
-
-                                                    <small>${userEmail}</small>
-                                                </h4>
-
-                                            </a>
-                                            <p class="description text-center"> "Le plein de fraîcheur <br>
-                                                et d'économies" <br>
-
-                                            </p>
-                                            <c:forEach var="item" items="${DISCOUNT_CODE}">
-                                                <p class="description text-center"> Vous possedez un le code de réduction suivant : "${item.DiscountCode}"</p>
-                                                <p class="description text-center"> Il vous donne accès à  : ${item.taux}% de réduction sur votre commande</p>
-                                            </c:forEach>
-                                        </div>
-
-                                    </div>
-                                    <hr>
-                                    <div class="text-center">
-                                        <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
-                                        <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
-                                        <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
-
-                                    </div>
-                                </div>
-                            </div>
+                                
 
                         </div>
 
@@ -227,8 +193,8 @@
                             <div class="col-md-12">
                                 <div class="card" >
                                     <div class="header">
-                                        <h4 class="title">Liste des produits en stock</h4>
-                                        <p class="category">Ici vous trouverez la liste des produits que vous pouvez acheter.</p>
+                                        <h4 class="title">Liste des produits </h4>
+                                        <p class="category">Voici la liste des produits </p>
                                     </div>
                                     <div class="content table-responsive table-full-width">
                                         <table class="table table-hover table-striped">
@@ -279,14 +245,14 @@
 
 
                 </div>
-                <footer class="footer">
+                    <footer class="footer">
                     <div class="container-fluid">
 
                         <p class="copyright pull-right">
-                            &copy;<a href="#">Promotion 2020</a>, made with <i data-v-a2425572="" class="fa fa-heart" style="color: rgb(233, 30, 99);"></i> by Sophie Peltier, Gabrielle Aussel & Anthony Dagneaux
+                            &copy; Promotion 2021. Projet réalisé par Margaux Berthaud, Nicolas Vollherbst, Hugo Broucke & Adrien Darribeyros
                         </p>
                     </div>
-                </footer>  
+                </footer>
             </div>
 
 
