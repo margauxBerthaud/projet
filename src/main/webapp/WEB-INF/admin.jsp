@@ -139,16 +139,16 @@
                                 <div class="card">
                                     <div class="header">
                                         <h4 class="title">Chiffre d'affaire par Zone Géographique</h4>
-                                        
-                                    </div>
-                                    <div class="content">
                                         <form method='POST' action="AdministratorController">
                                             <input type="date" class="choixdate" name="date_debut_geo">
                                             <input type="date" class="choixdate" name="date_fin_geo">
                                             <input type="hidden" name="action" value="caByGeo">
                                             <input type="submit" value="Envoyer">
                                         </form>
+                                    </div>
+                                    <div class="content">
                                         <canvas id="chartGeo"></canvas>
+                                        
                                         <div class="footer">
 
                                             <hr>
