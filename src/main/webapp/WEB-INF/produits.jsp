@@ -113,31 +113,17 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card">
-                                    <div class="header">
-                                        <h4 class="title">Votre compte</h4>
-                                    </div>
+                                    
                                     <div class="content">
 
                                         <div class="row">
                                             <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label>Solde de votre compte : </label>
-                                                    <fmt:setLocale value = "en_US"/>
-                                                    <input type="text" class="form-control" disabled placeholder="Company" value="<fmt:formatNumber value = "${solde}" type = "currency"/> ">
-                                                </div>
-                                            </div>
-                                            <form method='POST' action="CustomerController">
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Somme à verser</label>
-                                                        <input type="text" class="form-control" placeholder="montant" name="montant">
-                                                        <input type="hidden" name="action" value="DO_VIREMENT">
-                                                    </div>
-                                                </div>
+                                                
+                                                   
                                                 <div class="col-md-4">
                                                     <div class="form-group">
 
-                                                        <button type="submit" class="btn btn-info btn-fill pull-right">Effectuer le virement</button>
+                                                        
                                                     </div>
                                                 </div>
                                             </form>
@@ -167,7 +153,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Quantité</label>
-                                                        <input type="text" class="form-control" placeholder="Quantite" value="" name="quantite">
+                                                        <input type="number" class="form-control" placeholder="Quantite" value="" name="quantite">
                                                         <input type="hidden" name="action" value="ADD_COMMANDE">
                                                     </div>
                                                 </div>
