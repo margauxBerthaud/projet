@@ -37,10 +37,10 @@ Vous devez fournir un projet maven, déposé sur un dépôt github. Ce projet do
 
 Pour vous y retrouver sur GitHub, les commits ont été réalisé par : 
 
-  -Margaux pour Margaux Berthaud
-  -Adrien ou adarribe pour Adrien Darribeyros
-  -Broucki pour Hugo Broucke 
-  -nvollhes pour Nicolas Vollherbst 
+-Margaux pour Margaux Berthaud
+-Adrien ou adarribe pour Adrien Darribeyros
+-Broucki pour Hugo Broucke 
+-nvollhes pour Nicolas Vollherbst 
 
 
 Evaluation:
