@@ -1,4 +1,4 @@
-#Projet Technologoe Web 
+#Projet Technologie Web 
 
 Web Market Application
 
@@ -31,7 +31,8 @@ Une fois authentifié, l'administrateur a accès à une série de tableaux de bo
   --Visualiser les chiffres d'affaire par client, en choisissant la période (date de début / date de fin) sur laquelle doit porter la statistique.
     Pour l'affichage des graphiques, nous avons utilisé la charte graphique GoogleChart en JavaScript.
 
-Livrable
+Livrable:
+
 Vous devez fournir un projet maven, déposé sur un dépôt github. Ce projet doit être téléchargeable par git clone et immédiatement exécutable sous netbeans. Les contributions des différents membres du groupe doivent être clairement visibles via l'historique des "commits".
 
 Pour vous y retrouver sur GitHub, les commits ont été réalisé par : 
@@ -42,12 +43,15 @@ Pour vous y retrouver sur GitHub, les commits ont été réalisé par :
   -nvollhes pour Nicolas Vollherbst 
 
 
-Evaluation
+Evaluation:
+
 Le projet sera évalué par une présentation orale en groupe :
 
-Démonstration
+Démonstration:
+
 Examen du code source
 Questions/Réponses collectives et individuelles
 
-Merci davoir pris le tmps de visiter notre Application Web Market.
+Merci d'avoir pris le tmps de visiter notre Application Web Market.
+
 Projet réalisé par Margaux Berthaud, Hugo Broucke, Nicolas Vollherbst & Adrien Darribeyros
