@@ -47,8 +47,7 @@ Evaluation:
 
 Le projet sera évalué par une présentation orale en groupe :
 
-Démonstration:
-
+Démonstration
 Examen du code source
 Questions/Réponses collectives et individuelles
 
